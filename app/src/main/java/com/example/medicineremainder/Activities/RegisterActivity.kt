@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import com.example.medicineremainder.Model.MedicineType
 import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.SharedPrefHelper
 import com.example.medicineremainder.Utilities.ValidationUtils
@@ -24,6 +25,7 @@ class RegisterActivity : ComponentActivity() {
         setContentView(registerBinding.root)
         firebase = FirebaseAuth.getInstance()
         sharedPrefHelper = SharedPrefHelper(this)
+
             registerBinding.registerBtn.setOnClickListener {
 
                 val email = registerBinding.email.text.toString()
@@ -35,7 +37,8 @@ class RegisterActivity : ComponentActivity() {
                     firebase.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
                         registerBinding.progressBar.visibility = View.GONE
                         if (it.isSuccessful){
-                            val user:User = User(name,email,age.toInt())
+                            val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+                            val user:User = User(userId,name,email,age.toInt(),0.0,0.0)
                               sharedPrefHelper.saveUser(user)
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)

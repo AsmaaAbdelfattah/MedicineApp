@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import com.example.medicineremainder.Model.User
 import com.example.medicineremainder.R
+import com.example.medicineremainder.Utilities.SharedPrefHelper
 import com.example.medicineremainder.Utilities.ValidationUtils
 import com.example.medicineremainder.databinding.ActivityLogInBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -15,12 +17,14 @@ import com.google.firebase.auth.FirebaseAuth
 class LogInActivity : ComponentActivity() {
     lateinit var logBinding: ActivityLogInBinding
     lateinit var firebase :FirebaseAuth
+    lateinit var sharedPrefHelper: SharedPrefHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         logBinding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(logBinding.root)
         firebase = FirebaseAuth.getInstance()
+        sharedPrefHelper = SharedPrefHelper(this)
 
         logBinding.logInBtn.setOnClickListener {
             val email = logBinding.email.text.toString()
@@ -30,6 +34,9 @@ class LogInActivity : ComponentActivity() {
                  firebase.signInWithEmailAndPassword(email,password).addOnCompleteListener {
                      logBinding.progressBar.visibility = View.GONE
                                   if (it.isSuccessful){
+                                      val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+                                      val user: User = User(userId,"","",0,0.0,0.0)
+                                      sharedPrefHelper.saveUser(user)
                                       val intent = Intent(this, MainActivity::class.java)
                                       startActivity(intent)
                                   }else{
