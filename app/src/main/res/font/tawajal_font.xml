@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+        <font  app:fontWeight="400" app:font="@font/tajawal_regular"/>
+        <font  app:fontWeight="400" app:font="@font/tajawal_bold"/>
+        <font  app:fontWeight="400" app:font="@font/tajawal_extrabold"/>
+        <font  app:fontWeight="400" app:font="@font/tajawal_light"/>
+        <font  app:fontWeight="400" app:font="@font/tajawal_medium"/>
+</font-family>

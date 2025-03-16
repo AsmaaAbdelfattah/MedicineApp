@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MedicineRemainder</string>
+    <string name="enter_your_mobile_number">Enter your Name and Age to can use the app</string>
+    <string name="welcome">Welcome!</string>
+    <string name="log_in">Log In</string>
+    <string name="enter_your_name">Full Name</string>
+    <string name="or">OR</string>
+    <string name="Createanaccount">Create Account</string>
+    <string name="enter_your_phone">Phone</string>
+    <string name="enter_your_password">Password</string>
+    <string name="enter_your_age">Age</string>
+    <string name="enter_your_email">Email</string>
+    <string name="please_fill_all_the_fields">Please Fill All The Fields</string>
+    <string name="please_Enter_valid_email">Please Enter valid Email</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MedicineRemainder</string>
+    <string name="enter_your_mobile_number"> ادخل اسمك وعمرك لكي تتمكن من استخدام التطبيق</string>
+    <string name="welcome">مرحبا!</string>
+    <string name="log_in">تسجيل الدخول</string>
+    <string name="enter_your_name">الاسم بالكامل</string>
+    <string name="or">او</string>
+    <string name="Createanaccount">انشاء حساب</string>
+    <string name="enter_your_phone">رقم الهاتف</string>
+    <string name="enter_your_password">كلمة السر</string>
+    <string name="enter_your_age">العمر</string>
+    <string name="enter_your_email">البريد الالكتروني</string>
+    <string name="please_fill_all_the_fields">من فضلك ادخل جميع بياناتك</string>
+    <string name="please_Enter_valid_email"> من فضلك ادخل بريد الكتروني صحيح</string>
+</resources>

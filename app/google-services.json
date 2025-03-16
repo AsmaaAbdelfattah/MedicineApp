@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "764434339357",
+    "project_id": "medicineappreminder",
+    "storage_bucket": "medicineappreminder.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764434339357:android:7489054fca86cd6a5758f4",
+        "android_client_info": {
+          "package_name": "com.example.medicineremainder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKKRonIVVca4ocMU-T09Ixl0e9rW2loq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
