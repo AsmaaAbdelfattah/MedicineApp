@@ -13,6 +13,10 @@
     <string name="enter_your_email">البريد الالكتروني</string>
     <string name="please_fill_all_the_fields">من فضلك ادخل جميع بياناتك</string>
     <string name="please_Enter_valid_email"> من فضلك ادخل بريد الكتروني صحيح</string>
-    <string name="home">Home</string>
-    <string name="medicines">Medicines</string>
+    <string name="home">الصفحة الرئيسية</string>
+    <string name="medicines">الادويه</string>
+    <string name="today_s_medicine">ادوية اليوم</string>
+    <string name="upcoming">التالي</string>
+    <string name="stay_connrcted_with_your_health">كن متصلا بصحتك !</string>
+    <string name="hi">مرحبا</string>
 </resources>

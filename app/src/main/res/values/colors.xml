@@ -5,5 +5,9 @@
     <color name="darkGray">#252525</color>
     <color name="gray">#4A4848</color>
     <color name="mainAppColor">#864597</color>
+    <color name="darkPurpleColor">#B5AAEA</color>
+    <color name="lightPurple">#FDF4FF</color>
+
     <color name="background">#F5F5F5</color>
+    <color name="green">#65B065</color>
 </resources>

@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import com.example.medicineremainder.Model.User
 import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.SharedPrefHelper
+import com.example.medicineremainder.Utilities.FirebaseManager
 import com.example.medicineremainder.Utilities.ValidationUtils
 import com.example.medicineremainder.databinding.ActivityLogInBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -30,24 +31,13 @@ class LogInActivity : ComponentActivity() {
             val email = logBinding.email.text.toString()
             val password =  logBinding.password.text.toString()
              if (validateLogIn(email,password)){
-                 logBinding.progressBar.visibility = View.VISIBLE
-                 firebase.signInWithEmailAndPassword(email,password).addOnCompleteListener {
-                     logBinding.progressBar.visibility = View.GONE
-                                  if (it.isSuccessful){
-                                      val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-                                      val user: User = User(userId,"","",0,0.0,0.0)
-                                      sharedPrefHelper.saveUser(user)
-                                      val intent = Intent(this, MainActivity::class.java)
-                                      startActivity(intent)
-                                  }else{
-                                      Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                                  }
-                 }
+                 FirebaseManager.signInWithEmailAndPassword(this,email,password,logBinding.progressBar,sharedPrefHelper)
              }
         }
 
     }
 
+    //TODO: validate log in
     fun validateLogIn(email:String, password: String):Boolean{
         if (email.isEmpty() || password.isEmpty()){
             Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()

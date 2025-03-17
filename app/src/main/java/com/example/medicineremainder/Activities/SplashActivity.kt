@@ -26,9 +26,15 @@ class SplashActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            if (sharedPrefHelper.isUserLoggedIn()) {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                val intent = Intent(this, LogInActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         },3000)
 
     }

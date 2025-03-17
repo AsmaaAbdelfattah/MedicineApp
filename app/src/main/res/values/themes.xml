@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.MedicineRemainder" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.MedicineRemainder" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/mainAppColor</item>
+        <item name="colorSecondary">@color/background</item>
+    </style>
+
 </resources>

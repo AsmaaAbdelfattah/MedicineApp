@@ -12,8 +12,11 @@
     <string name="enter_your_email">Email</string>
     <string name="please_fill_all_the_fields">Please Fill All The Fields</string>
     <string name="please_Enter_valid_email">Please Enter valid Email</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="home">Home</string>
     <string name="medicines">Medicines</string>
+    <string name="today_s_medicine">Today\'s Medicine</string>
+    <string name="upcoming">UpComing</string>
+    <string name="stay_connrcted_with_your_health">Stay Connected With Your Health!</string>
+    <string name="hi">Hi</string>
 </resources>

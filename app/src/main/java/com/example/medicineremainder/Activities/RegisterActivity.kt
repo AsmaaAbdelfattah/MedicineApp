@@ -13,6 +13,7 @@ import com.example.medicineremainder.Utilities.ValidationUtils
 import com.example.medicineremainder.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.example.medicineremainder.Model.User
+import com.example.medicineremainder.Utilities.FirebaseManager
 
 class RegisterActivity : ComponentActivity() {
     lateinit var firebase : FirebaseAuth
@@ -33,23 +34,11 @@ class RegisterActivity : ComponentActivity() {
                 val age = registerBinding.age.text.toString()
                 val password = registerBinding.password.text.toString()
                 if (validateRegister(email,name,age,password)){
-                    registerBinding.progressBar.visibility = View.VISIBLE
-                    firebase.createUserWithEmailAndPassword(email,password).addOnCompleteListener {
-                        registerBinding.progressBar.visibility = View.GONE
-                        if (it.isSuccessful){
-                            val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-                            val user:User = User(userId,name,email,age.toInt(),0.0,0.0)
-                              sharedPrefHelper.saveUser(user)
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                        }else{
-                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
+                    FirebaseManager.createUserWithEmailAndPassword(this,name,email,age.toInt(),password,registerBinding.progressBar,sharedPrefHelper)
                }
              }
     }
+    //TODO: validate register
     fun validateRegister(email:String,name:String,age:String, password: String):Boolean{
         if (email.isEmpty() || password.isEmpty() || age.isEmpty() || name.isEmpty()){
             Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()

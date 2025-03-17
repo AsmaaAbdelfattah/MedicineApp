@@ -36,4 +36,7 @@ class SharedPrefHelper(context: Context) {
     fun clearUser() {
         sharedPreferences.edit().remove(KEY_USER).apply()
     }
+    fun isUserLoggedIn(): Boolean {
+        return getUser() != null
+    }
 }
