@@ -18,6 +18,9 @@ class SharedPrefHelper(context: Context) {
     /** ✅ Save a Single User **/
     fun saveUser(user: User) {
         val gson = Gson()
+        if (user.medicine == null) {
+            user.medicine = mutableListOf()
+        }
         val json = gson.toJson(user)  // Convert user to JSON
         sharedPreferences.edit().putString(KEY_USER, json).apply()
     }

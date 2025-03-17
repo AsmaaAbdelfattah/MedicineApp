@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicineremainder.Adapters.TodayMedicineAdapter
 import com.example.medicineremainder.Model.Medicine
+import com.example.medicineremainder.Model.MedicineType
 import com.example.medicineremainder.Model.User
 import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.FirebaseManager
@@ -40,6 +41,18 @@ class HomeFragment : Fragment() {
                  bindUser(user)
              }
          }
+//        FirebaseManager.addMedicineToUser(requireContext(),Medicine("third",true,"5 days","5 tablet",true,"10:00 AM", MedicineType.BILLS)){ success ->
+//            if (success) {
+//                FirebaseManager.currentUserFromDB(requireContext()){ user ->
+//                    if (user != null) {
+//                        bindUser(user)
+//                    }
+//                }
+//            }else{
+//                Toast.makeText(requireContext(), "Cannots amm", Toast.LENGTH_SHORT).show()
+//
+//            }
+//        }
         return binding.root
     }
 
