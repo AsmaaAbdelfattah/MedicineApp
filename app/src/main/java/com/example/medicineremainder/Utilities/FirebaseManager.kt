@@ -57,9 +57,43 @@ object FirebaseManager {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     Log.d("FirebaseManager", document.toString())
-                    val user = document.toObject(User::class.java)
-                    user?.let { sharedPrefHelper.saveUser(it) }
-                    callback(user)
+
+                    // Get user data as a map
+                    val userMap = document.data
+
+                    if (userMap != null) {
+                        val medicineList = (userMap["medicine"] as? List<Map<String, Any>>) ?: listOf()
+                        val medicineObjects = medicineList.map { medicineMap ->
+                            Medicine(
+                                name = medicineMap["name"] as? String ?: "",
+                                durtion = medicineMap["duration"] as? String ?: "",
+                                dose = medicineMap["dose"] as? String ?: "",
+                                remindMe = medicineMap["remindMe"] as? Boolean ?: true,
+                                dates = (medicineMap["dates"] as? List<String>)?.toMutableList() ?: mutableListOf(),
+                                time = medicineMap["time"] as? String ?: "",
+                                type = (medicineMap["type"] as? Int)?.let { intType ->
+                                    MedicineType.values().firstOrNull { it.type == intType } ?: MedicineType.BILLS
+                                } ?: MedicineType.BILLS
+
+                            )
+                        }.toMutableList()
+
+                        val user = User(
+                            userId = userMap["userId"] as? String ?: "",
+                            name = userMap["name"] as? String ?: "",
+                            email = userMap["email"] as? String ?: "",
+                            age = (userMap["age"] as? Long)?.toInt() ?: 0,
+                            latitude = (userMap["latitude"] as? Double) ?: 0.0,
+                            longitude = (userMap["longitude"] as? Double) ?: 0.0,
+                            medicine = medicineObjects
+                        )
+
+                        sharedPrefHelper.saveUser(user)
+                        callback(user)
+                    } else {
+                        Log.e("FirebaseManager", "User data is null in Firestore.")
+                        callback(null)
+                    }
                 } else {
                     Log.e("FirebaseManager", "User not found in Firestore.")
                     callback(null)
@@ -70,6 +104,7 @@ object FirebaseManager {
                 callback(null)
             }
     }
+
 
     // 🔹 Register User with Email & Password
     fun createUserWithEmailAndPassword(
@@ -117,7 +152,7 @@ object FirebaseManager {
                 progressBar.visibility = View.GONE
                 if (task.isSuccessful) {
                     val userId = auth.currentUser?.uid.toString()
-                    val user = User(userId, "", "", 0,0.0, 0.0, MutableList(0,init = {Medicine("",false,"","",true,"",MedicineType.BILLS)}) )
+                    val user = User(userId, "", "", 0,0.0, 0.0)
                     sharedPrefHelper.saveUser(user)
                     context.startActivity(Intent(context, MainActivity::class.java))
                 } else {
@@ -126,6 +161,7 @@ object FirebaseManager {
             }
     }
 
+    //TODO add medicine to user list
     fun addMedicineToUser(context: Context, newMedicine: Medicine, callback: (Boolean) -> Unit) {
         val sharedPrefHelper = SharedPrefHelper(context)
         val userId = sharedPrefHelper.getUser()?.userId.toString()
@@ -133,14 +169,28 @@ object FirebaseManager {
 
         databaseReference.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
-                // Convert snapshot to User object
                 val user = snapshot.getValue(User::class.java)
-                // Ensure medicine list is not null
-                val updatedMedicineList = user?.medicine?.toMutableList() ?: mutableListOf() // Initialize if null
-                // Add new medicine
+                val updatedMedicineList = user?.medicine?.toMutableList() ?: mutableListOf()
+
+                // Add the new medicine
                 updatedMedicineList.add(newMedicine)
-                // Update in Firebase
-                databaseReference.child("medicine").setValue(updatedMedicineList)
+
+                // Convert MedicineType to Int before saving
+                val firebaseMedicineList = updatedMedicineList.map { medicine ->
+                    mapOf(
+                        "name" to medicine.name,
+                        "duration" to medicine.durtion,
+                        "dose" to medicine.dose,
+                        "remindMe" to medicine.remindMe,
+                        "dates" to medicine.dates,
+                        "time" to medicine.time,
+                        "type" to medicine.type
+                        // Store enum as Int
+                    )
+                }
+
+                // Save back to Firebase
+                databaseReference.child("medicine").setValue(firebaseMedicineList)
                     .addOnSuccessListener {
                         Toast.makeText(context, "Medicine added successfully", Toast.LENGTH_SHORT).show()
                         Log.d("FirebaseManager", "Medicine added successfully")
@@ -149,6 +199,65 @@ object FirebaseManager {
                     .addOnFailureListener { e ->
                         Toast.makeText(context, "Failed to add medicine", Toast.LENGTH_SHORT).show()
                         Log.e("FirebaseManager", "Failed to add medicine", e)
+                        callback(false)
+                    }
+            } else {
+                Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
+                Log.e("FirebaseManager", "User not found")
+                callback(false)
+            }
+        }.addOnFailureListener { e ->
+            Toast.makeText(context, "Error fetching user", Toast.LENGTH_SHORT).show()
+            Log.e("FirebaseManager", "Error fetching user ${userId}", e)
+            callback(false)
+        }
+    }
+    fun editMedicineForUser(
+        context: Context,
+        updatedMedicine: Medicine,
+        callback: (Boolean) -> Unit
+    ) {
+        val sharedPrefHelper = SharedPrefHelper(context)
+        val userId = sharedPrefHelper.getUser()?.userId.toString()
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+
+        databaseReference.get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                val user = snapshot.getValue(User::class.java)
+                val updatedMedicineList = user?.medicine?.toMutableList() ?: mutableListOf()
+
+                // Find the medicine to edit (Assuming 'name' is unique; you can use another identifier)
+                val index = updatedMedicineList.indexOfFirst { it.name == updatedMedicine.name }
+                if (index != -1) {
+                    updatedMedicineList[index] = updatedMedicine // Update existing medicine
+                } else {
+                    callback(false) // Medicine not found
+                    return@addOnSuccessListener
+                }
+
+                // Convert MedicineType to Int before saving
+                val firebaseMedicineList = updatedMedicineList.map { medicine ->
+                    mapOf(
+                        "name" to medicine.name,
+                        "duration" to medicine.durtion,
+                        "dose" to medicine.dose,
+                        "remindMe" to medicine.remindMe,
+                        "dates" to medicine.dates,
+                        "time" to medicine.time,
+                        "type" to medicine.type // Store enum as Int
+                    )
+                }
+
+                // Save back to Firebase
+                databaseReference.child("medicine").setValue(firebaseMedicineList)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Medicine updated successfully", Toast.LENGTH_SHORT).show()
+                        Log.d("FirebaseManager", "Medicine updated successfully")
+                        callback(true)
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(context, "Failed to update medicine", Toast.LENGTH_SHORT).show()
+                        Log.e("FirebaseManager", "Failed to update medicine", e)
                         callback(false)
                     }
             } else {

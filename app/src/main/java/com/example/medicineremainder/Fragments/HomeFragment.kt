@@ -19,6 +19,7 @@ import com.example.medicineremainder.databinding.FragmentHomeBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
@@ -41,7 +42,9 @@ class HomeFragment : Fragment() {
                  bindUser(user)
              }
          }
-//        FirebaseManager.addMedicineToUser(requireContext(),Medicine("third",true,"5 days","5 tablet",true,"10:00 AM", MedicineType.BILLS)){ success ->
+//        FirebaseManager.addMedicineToUser(requireContext(),Medicine(
+//            UUID.randomUUID().toString(),"first","7 days","5 tablet",true,
+//            mutableListOf("15 sep","16 sep","3sep"), MedicineType.BILLS.type.toString())){ success ->
 //            if (success) {
 //                FirebaseManager.currentUserFromDB(requireContext()){ user ->
 //                    if (user != null) {

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/background"
+    tools:context=".Fragments.AddMedicineFragment"
+    >
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+    <LinearLayout
+        android:id="@+id/calenderLinear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/lightPurple"
+        app:layout_constraintHeight_percent = "0.15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+       >
+
+        <!-- Month-Year Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/btnPrevMonth"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_left"
+                android:tint="@color/mainAppColor"
+                tools:ignore="UseAppTint" />
+
+            <TextView
+                android:id="@+id/txtMonthYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="February 2025"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:paddingHorizontal="16dp"/>
+
+            <ImageView
+                android:id="@+id/btnNextMonth"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_right"
+                android:tint="@color/mainAppColor"
+                tools:ignore="UseAppTint" />
+        </LinearLayout>
+
+        <!-- Calendar View -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/calenderrecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+         />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="@color/darkGray"
+        android:textSize="23sp"
+        android:text="@string/medicine_name"
+        android:fontFamily="@font/tajawal_medium"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/calenderLinear"
+        />
+    <EditText
+        android:id="@+id/mediceNameEt"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="@string/enter__medicine_name"
+        android:fontFamily="@font/tajawal_regular"
+        android:textSize="25sp"
+        android:textColor="@color/darkGray"
+        android:background="@drawable/et_borders"
+        android:inputType="text"
+        android:padding="8dp"
+        android:layout_marginVertical="15dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message"
+        />
+    <TextView
+        android:id="@+id/typeTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="@color/darkGray"
+        android:textSize="23sp"
+        android:text="@string/Type"
+        android:fontFamily="@font/tajawal_medium"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mediceNameEt"
+        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/medicineTypes"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginVertical="15dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/typeTV"
+        android:layout_marginHorizontal="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/capsule"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:src="@drawable/capsule"
+            android:scaleType="center"
+            android:background="@drawable/borders"
+            android:layout_marginHorizontal="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/drink"
+            app:layout_constraintHorizontal_weight="1" />
+
+        <ImageView
+            android:id="@+id/drink"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:src="@drawable/drink"
+            android:scaleType="center"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/borders"
+            app:layout_constraintStart_toEndOf="@id/capsule"
+            app:layout_constraintEnd_toStartOf="@id/cream"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="1" />
+
+        <ImageView
+            android:id="@+id/cream"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:src="@drawable/cream"
+            android:scaleType="center"
+            android:background="@drawable/borders"
+            android:layout_marginHorizontal="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/drink"
+            app:layout_constraintEnd_toStartOf="@id/injection"
+            app:layout_constraintHorizontal_weight="1" />
+
+        <ImageView
+            android:id="@+id/injection"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:padding="3dp"
+            android:src="@drawable/injection"
+            android:scaleType="center"
+            android:background="@drawable/borders"
+            android:layout_marginHorizontal="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cream"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+<LinearLayout
+    android:id="@+id/interval_linear"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginVertical="20dp"
+    android:layout_marginHorizontal="10dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/medicineTypes"
+    >
+    <TextView
+        android:id="@+id/interval"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/Interval"
+        android:fontFamily="@font/tajawal_bold"
+        android:layout_marginHorizontal="10dp"
+        android:layout_weight="0.25"
+        />
+    <Spinner
+    android:id="@+id/intervalSpinner"
+    android:layout_width="0dp"
+    android:layout_height="45dp"
+    android:foregroundTint="@color/mainAppColor"
+    android:entries="@array/intervalsList"
+    android:background="@drawable/borders"
+        android:layout_weight="0.65"
+    />
+</LinearLayout>
+    <LinearLayout
+        android:id="@+id/notes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.15"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/interval_linear"
+        >
+        <TextView
+            android:id="@+id/notesTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="@string/Notes"
+            android:fontFamily="@font/tajawal_bold"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="0.25"
+            />
+        <EditText
+            android:id="@+id/notesEt"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:padding="6dp"
+            android:foregroundTint="@color/mainAppColor"
+            android:hint="@string/enter_medicine_instructions"
+            android:background="@drawable/borders"
+            android:layout_weight="0.65"
+            />
+    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

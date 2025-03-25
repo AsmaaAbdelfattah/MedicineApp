@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.medicineremainder.Fragments.HomeFragment
 import com.example.medicineremainder.Fragments.MedicationsFragment
+import com.example.medicineremainder.Fragments.AddMedicineFragment
 import com.example.medicineremainder.R
 import com.example.medicineremainder.databinding.MainActivityBinding
 
@@ -25,6 +26,7 @@ lateinit var homeBinding: MainActivityBinding
               when(it.itemId){
                   R.id.home -> replaceFragment(HomeFragment())
                   R.id.medicines -> replaceFragment(MedicationsFragment())
+                  R.id.addMed -> replaceFragment(AddMedicineFragment())
                   else ->{
 
                   }

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.medicineremainder"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -39,33 +39,48 @@ android {
         compose = true
         viewBinding = true
     }
+
 }
 
 dependencies {
-    implementation ("androidx.appcompat:appcompat:1.6.1")
-    implementation ("com.google.android.material:material:1.11.0")
-    implementation ("com.google.code.gson:gson:2.10.1")
-    implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation ("androidx.recyclerview:recyclerview:1.2.1")
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.firebase.firestore)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.database.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+
+// Updated AndroidX libraries
+    implementation("androidx.appcompat:appcompat:1.6.1") // Latest stable version
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4") // Latest stable version
+    implementation("androidx.recyclerview:recyclerview:1.3.2") // Latest stable version
+    implementation("androidx.core:core-ktx:1.12.0") // Latest stable version
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0") // Latest stable version
+    implementation("androidx.activity:activity-ktx:1.9.0") // Latest stable version
+
+    // Material Components (Jetpack Compose & Material3)
+    implementation("androidx.compose.ui:ui:1.6.1") // Latest stable version
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.1") // Latest stable version
+    implementation("com.google.android.material:material:1.11.0") // Latest stable version
+
+    // Firebase Dependencies
+    implementation("com.google.firebase:firebase-firestore-ktx:24.10.0") // Latest stable version
+    implementation("com.google.firebase:firebase-auth-ktx:22.2.0") // Latest stable version
+    implementation("com.google.firebase:firebase-database-ktx:20.3.1") // Latest stable version
+
+    // JSON Parser
+    implementation("com.google.code.gson:gson:2.10.1") // Latest stable version
+
+    // Testing dependencies
+    testImplementation("junit:junit:4.13.2") // Latest stable version
+    androidTestImplementation("androidx.test.ext:junit:1.1.5") // Latest stable version
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1") // Latest stable version
+
+    // Debugging & UI Testing
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.1")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.1")
+
+    // Platform BOM for Compose
+    implementation(platform("androidx.compose:compose-bom:2024.02.00"))
+
+    // Alternative to Material CalendarView (as original is outdated)
+//    implementation("com.mhiew.material-calendarview:library:2.0.1") // Maintained version
+//
+//    // The view calendar library for Android
+//    implementation("com.kizitonwose.calendar:view:2.0.1")
+
 }

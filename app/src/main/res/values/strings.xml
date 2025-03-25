@@ -19,4 +19,17 @@
     <string name="upcoming">UpComing</string>
     <string name="stay_connrcted_with_your_health">Stay Connected With Your Health!</string>
     <string name="hi">Hi</string>
+
+    <string name="addMedicines">Add Medicine</string>
+    <string name="medicine_name">Medicine Name</string>
+    <string name="enter__medicine_name">Medicine Name</string>
+    <string name="Interval">Interval</string>
+    <string name="Notes">Notes</string>
+    <string name="enter_medicine_instructions">Enter Medicine Instructions</string>
+    <string name="Type">Type</string>
+    <string-array name="intervalsList">
+        <item>"24 hr"</item>>
+        <item>"12 hr"</item>>
+        <item>"8 hr"</item>>
+    </string-array>
 </resources>

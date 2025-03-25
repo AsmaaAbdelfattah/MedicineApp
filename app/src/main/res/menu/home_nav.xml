@@ -10,4 +10,6 @@
 
     <item android:title="@string/medicines" android:id="@+id/medicines" android:icon="@drawable/ic_medicine"
     />
+    <item android:title="@string/addMedicines" android:id="@+id/addMed" android:icon="@drawable/ic_plus"
+        />
 </menu>

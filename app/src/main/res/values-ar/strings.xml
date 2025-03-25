@@ -19,4 +19,16 @@
     <string name="upcoming">التالي</string>
     <string name="stay_connrcted_with_your_health">كن متصلا بصحتك !</string>
     <string name="hi">مرحبا</string>
+    <string name="addMedicines">Add Medicine</string>
+    <string name="medicine_name">Medicine Name</string>
+    <string name="enter__medicine_name">Medicine Name</string>
+    <string name="Interval">Interval</string>
+    <string name="Notes">Notes</string>
+    <string name="enter_medicine_instructions">Enter Medicine Instructions</string>
+    <string name="Type">Type</string>
+    <string-array name="intervalsList">
+        <item>"٢٤ ساعة"</item>>
+        <item>"١٢ ساعة"</item>>
+        <item>"٨ ساعات"</item>>
+    </string-array>
 </resources>

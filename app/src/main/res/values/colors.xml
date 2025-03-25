@@ -7,7 +7,7 @@
     <color name="mainAppColor">#864597</color>
     <color name="darkPurpleColor">#B5AAEA</color>
     <color name="lightPurple">#FDF4FF</color>
-
     <color name="background">#F5F5F5</color>
     <color name="green">#65B065</color>
+    <color name="colorSecondary">#B5AAEA</color>
 </resources>
