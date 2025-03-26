@@ -42,20 +42,7 @@ class HomeFragment : Fragment() {
                  bindUser(user)
              }
          }
-//        FirebaseManager.addMedicineToUser(requireContext(),Medicine(
-//            UUID.randomUUID().toString(),"first","7 days","5 tablet",true,
-//            mutableListOf("15 sep","16 sep","3sep"), MedicineType.BILLS.type.toString())){ success ->
-//            if (success) {
-//                FirebaseManager.currentUserFromDB(requireContext()){ user ->
-//                    if (user != null) {
-//                        bindUser(user)
-//                    }
-//                }
-//            }else{
-//                Toast.makeText(requireContext(), "Cannots amm", Toast.LENGTH_SHORT).show()
-//
-//            }
-//        }
+
         return binding.root
     }
 

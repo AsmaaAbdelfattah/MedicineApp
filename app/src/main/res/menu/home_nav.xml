@@ -10,6 +10,6 @@
 
     <item android:title="@string/medicines" android:id="@+id/medicines" android:icon="@drawable/ic_medicine"
     />
-    <item android:title="@string/addMedicines" android:id="@+id/addMed" android:icon="@drawable/ic_plus"
+    <item android:title="@string/addMedicines" android:id="@+id/addMed" android:iconTint="@color/mainAppColor" android:icon="@drawable/ic_add_med"
         />
 </menu>

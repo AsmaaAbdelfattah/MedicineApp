@@ -66,10 +66,12 @@ object FirebaseManager {
                         val medicineObjects = medicineList.map { medicineMap ->
                             Medicine(
                                 name = medicineMap["name"] as? String ?: "",
-                                durtion = medicineMap["duration"] as? String ?: "",
+                                startDate = medicineMap["startDate"] as? String ?: "",
                                 dose = medicineMap["dose"] as? String ?: "",
                                 remindMe = medicineMap["remindMe"] as? Boolean ?: true,
-                                dates = (medicineMap["dates"] as? List<String>)?.toMutableList() ?: mutableListOf(),
+                                endDate = medicineMap["endDate"] as? String ?: "",
+                                takenDates = (medicineMap["takenDates"] as? List<String>)?.toMutableList() ?: mutableListOf(),
+                                frequency = medicineMap["frequency"] as? String ?: "",
                                 time = medicineMap["time"] as? String ?: "",
                                 type = (medicineMap["type"] as? Int)?.let { intType ->
                                     MedicineType.values().firstOrNull { it.type == intType } ?: MedicineType.BILLS
@@ -164,54 +166,84 @@ object FirebaseManager {
     //TODO add medicine to user list
     fun addMedicineToUser(context: Context, newMedicine: Medicine, callback: (Boolean) -> Unit) {
         val sharedPrefHelper = SharedPrefHelper(context)
-        val userId = sharedPrefHelper.getUser()?.userId.toString()
-        val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+        val userId = sharedPrefHelper.getUser()?.userId ?: return callback(false) // Prevent null userId
 
-        databaseReference.get().addOnSuccessListener { snapshot ->
-            if (snapshot.exists()) {
-                val user = snapshot.getValue(User::class.java)
-                val updatedMedicineList = user?.medicine?.toMutableList() ?: mutableListOf()
+        val firestore = FirebaseFirestore.getInstance()
+        val userRef = firestore.collection("Users").document(userId)
 
-                // Add the new medicine
-                updatedMedicineList.add(newMedicine)
+        userRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                val existingMedicines = document.get("medicine") as? List<Map<String, Any>> ?: emptyList()
 
-                // Convert MedicineType to Int before saving
-                val firebaseMedicineList = updatedMedicineList.map { medicine ->
+                // Convert Firestore data to Medicine objects
+                val updatedMedicineList = existingMedicines.mapNotNull { data ->
+                    try {
+                        Medicine(
+                            medicineId = data["medicineId"] as? String ?: return@mapNotNull null,
+                            name = data["name"] as? String ?: "",
+                            endDate = data["endDate"] as? String ?: "",
+                            dose = data["dose"] as? String ?: "",
+                            remindMe = data["remindMe"] as? Boolean ?: false,
+                            startDate = data["startDate"] as? String ?: "",
+                            takenDates = (data["takenDates"] as? List<String>)?.toMutableList() ?: mutableListOf(),
+                            frequency = data["frequency"] as? String ?: "",
+                            time = data["time"] as? String ?: "", // Optional
+                            notes = data["notes"] as? String, // Optional
+                            type = (data["type"] as? Long)?.toInt()?.let { MedicineType.values().getOrNull(it) } ?: MedicineType.BILLS
+                        )
+                    } catch (e: Exception) {
+                        Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                        null
+                    }
+                }.toMutableList()
+
+                // Check if medicine already exists
+                val existingMedicineIndex = updatedMedicineList.indexOfFirst { it.medicineId == newMedicine.medicineId }
+                if (existingMedicineIndex != -1) {
+                    // Update existing medicine
+                    updatedMedicineList[existingMedicineIndex] = newMedicine
+                } else {
+                    // Add new medicine
+                    updatedMedicineList.add(newMedicine)
+                }
+
+                // Convert list back to Firestore format
+                val updatedMedicineMap = updatedMedicineList.map { medicine ->
                     mapOf(
+                        "medicineId" to medicine.medicineId,
                         "name" to medicine.name,
-                        "duration" to medicine.durtion,
+                        "endDate" to medicine.endDate,
                         "dose" to medicine.dose,
                         "remindMe" to medicine.remindMe,
-                        "dates" to medicine.dates,
-                        "time" to medicine.time,
-                        "type" to medicine.type
-                        // Store enum as Int
+                        "startDate" to medicine.startDate,
+                        "takenDates" to medicine.takenDates,
+                        "frequency" to medicine.frequency,
+                        "time" to medicine.time, // Optional
+                        "notes" to medicine.notes, // Optional
+                        "type" to medicine.type.ordinal
                     )
                 }
 
-                // Save back to Firebase
-                databaseReference.child("medicine").setValue(firebaseMedicineList)
+                // Save back to Firestore
+                userRef.update("medicine", updatedMedicineMap)
                     .addOnSuccessListener {
-                        Toast.makeText(context, "Medicine added successfully", Toast.LENGTH_SHORT).show()
-                        Log.d("FirebaseManager", "Medicine added successfully")
+                        Toast.makeText(context, "Medicine added/updated successfully", Toast.LENGTH_SHORT).show()
                         callback(true)
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(context, "Failed to add medicine", Toast.LENGTH_SHORT).show()
-                        Log.e("FirebaseManager", "Failed to add medicine", e)
+                        Toast.makeText(context, "Failed to add/update medicine", Toast.LENGTH_SHORT).show()
                         callback(false)
                     }
             } else {
                 Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
-                Log.e("FirebaseManager", "User not found")
                 callback(false)
             }
-        }.addOnFailureListener { e ->
+        }.addOnFailureListener {
             Toast.makeText(context, "Error fetching user", Toast.LENGTH_SHORT).show()
-            Log.e("FirebaseManager", "Error fetching user ${userId}", e)
             callback(false)
         }
     }
+
     fun editMedicineForUser(
         context: Context,
         updatedMedicine: Medicine,
@@ -239,10 +271,12 @@ object FirebaseManager {
                 val firebaseMedicineList = updatedMedicineList.map { medicine ->
                     mapOf(
                         "name" to medicine.name,
-                        "duration" to medicine.durtion,
+                        "startDate" to medicine.startDate,
                         "dose" to medicine.dose,
                         "remindMe" to medicine.remindMe,
-                        "dates" to medicine.dates,
+                        "endDate" to medicine.endDate,
+                        "takenDates" to medicine.takenDates,
+                        "frequency" to medicine.frequency,
                         "time" to medicine.time,
                         "type" to medicine.type // Store enum as Int
                     )

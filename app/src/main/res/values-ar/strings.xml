@@ -26,6 +26,15 @@
     <string name="Notes">Notes</string>
     <string name="enter_medicine_instructions">Enter Medicine Instructions</string>
     <string name="Type">Type</string>
+    <string name="Dose">Dose</string>
+    <string name="pleaseSelectStartTime">Please Select Time Reminder For This medicine</string>
+    <string name="SaveMedicine">Save Medicine</string>
+    <string name="please_enter_medicine_name">Please enter medicine name</string>
+    <string name="please_select_dates_for_reminder">please select dates for reminder</string>
+    <string name="please_choose_interval">Please select Interval</string>
+    <string name="saved_successfully">Save Suucessfully</string>
+    <string name="enter_medicine_dose">Enter Medicine Dose</string>
+    <string name="please_choose_time">Please choose time for remonder</string>
     <string-array name="intervalsList">
         <item>"٢٤ ساعة"</item>>
         <item>"١٢ ساعة"</item>>

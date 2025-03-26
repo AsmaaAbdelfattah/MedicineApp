@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/card_view"
     android:id="@+id/calItem"
+    android:layout_marginHorizontal="4dp"
   >
 
 
