@@ -19,6 +19,7 @@ import com.example.medicineremainder.Model.MedicineType
 import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.FirebaseManager
 import com.example.medicineremainder.databinding.FragmentAddMedicineBinding
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.Locale
@@ -104,18 +105,28 @@ class AddMedicineFragment : Fragment() {
 
     fun refreshCalender(){
         val days = getDaysOfMonth()
-        calendarAdapter = CalendarAdapter(days,selectedDays){selectedDay ->
-            if (selectedDays.contains(selectedDay)) {
-                println(selectedDays)
-               // selectedDays.remove(selectedDay) // Deselect if already selected
-            } else {
-              //  selectedDays.add(selectedDay) // Select if not already selected
-            }
-            calendarAdapter.notifyDataSetChanged()
+        // Select today's date initially
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+        if (days.second.contains(today)) {
+            selectedDays.add(today)
         }
 
-        binding.calenderrecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.calenderrecyclerView.adapter = calendarAdapter
+        // Set up RecyclerView
+        calendarAdapter = CalendarAdapter(days, selectedDays) { updatedSelection ->
+            selectedDays.clear()
+            selectedDays.addAll(updatedSelection)
+        }
+
+        binding.calenderrecyclerView.apply {
+            adapter = calendarAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+            // Scroll to today's date
+            val todayIndex = days.second.indexOf(today)
+            if (todayIndex != -1) {
+                postDelayed({ scrollToPosition(todayIndex) }, 200) // Smooth scroll
+            }
+        }
     }
     fun handleMedicineType(){
         binding.capsule.setOnClickListener {
@@ -148,27 +159,30 @@ class AddMedicineFragment : Fragment() {
         }
     }
 //TODo handle create month days
-    fun getDaysOfMonth(): Pair<List<String>, List<String>> {
-        val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-        val days = mutableListOf<String>()
-        val weekDays = mutableListOf<String>()
+fun getDaysOfMonth(): Pair<List<String>, List<String>> {
+    val calendar = Calendar.getInstance()
+    val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+    val days = mutableListOf<String>()
+    val weekDays = mutableListOf<String>()
 
-        // Weekday names: adjust as needed
-        val weekDayNames = arrayOf("MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN")
-         val monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) ?: ""
-       binding.txtMonthYear.text = monthName
-        // Get each day of the month along with its corresponding week day
-        for (day in 1..daysInMonth) {
-            // Set the calendar to the specific date
-            calendar.set(Calendar.DAY_OF_MONTH, day)
+    val weekDayNames = arrayOf("MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN")
 
-            // Get the current weekday index (0=Sunday, 1=Monday, ..., 6=Saturday)
-            val weekDayIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1 // Adjust for 0-based index
-            days.add(day.toString())
-            weekDays.add(weekDayNames[weekDayIndex % 7]) // Ensure it wraps around for index
-        }
-        return Pair(weekDays, days)
+    // Get the first day of the month
+    calendar.set(Calendar.DAY_OF_MONTH, 1)
+    val firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // Adjust for 0-based index
+
+    // Populate actual days
+    for (day in 1..daysInMonth) {
+        calendar.set(Calendar.DAY_OF_MONTH, day)
+        val weekDayIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+
+        days.add(formattedDate) // Store date in YYYY-MM-DD format
+        weekDays.add(weekDayNames[weekDayIndex])
     }
+
+    return Pair(weekDays, days)
+}
     //TODO handle create time picker
     fun showTimePicker() {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
