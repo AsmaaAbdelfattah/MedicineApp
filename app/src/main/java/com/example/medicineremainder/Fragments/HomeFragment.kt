@@ -18,6 +18,7 @@ import com.example.medicineremainder.Utilities.SharedPrefHelper
 import com.example.medicineremainder.databinding.FragmentHomeBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
@@ -40,6 +41,7 @@ class HomeFragment : Fragment() {
          FirebaseManager.currentUserFromDB(requireContext()){ user ->
              if (user != null) {
                  bindUser(user)
+
              }
          }
 
@@ -49,7 +51,7 @@ class HomeFragment : Fragment() {
     //TODO: bind user
      fun bindUser(user:User){
             binding.welcome.text = getString(R.string.hi) + " " + user.name + "\n" + getString(R.string.stay_connrcted_with_your_health)
-            newsList = user.medicine
+            newsList = filterMedicinesForToday(user.medicine).toMutableList()
             adapter = TodayMedicineAdapter(newsList)
              binding.todayRecycler.adapter = adapter
              adapter.notifyDataSetChanged()
@@ -60,5 +62,26 @@ class HomeFragment : Fragment() {
         val calendar = Calendar.getInstance()
         val formatter = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
         return formatter.format(calendar.time)
+    }
+    //TODO filter medicine list
+    fun filterMedicinesForToday(medicines: MutableList<Medicine>): List<Medicine> {
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+        return medicines.filter { medicine ->
+            val startDate = medicine.startDate
+            val endDate = medicine.endDate
+            val frequency = medicine.frequency
+
+            // Medicine must have a valid start date
+            if (startDate.isNullOrEmpty()) return@filter false
+
+            // Check if today is within the medicine's duration
+            val isWithinRange = (startDate <= today) && (endDate.isNullOrEmpty() || today <= endDate)
+
+            // If frequency is set, check if today matches the schedule
+            val isScheduledToday = frequency?.contains(today) ?: true
+
+            isWithinRange && isScheduledToday
+        }
     }
 }

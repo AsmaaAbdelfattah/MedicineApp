@@ -206,6 +206,7 @@ class AddMedicineFragment : Fragment() {
         if (selectedDays.size == 0){
             Toast.makeText(requireContext(),
                 getString(R.string.please_select_dates_for_reminder),Toast.LENGTH_SHORT).show()
+            return false
         }else{
             medicine.startDate = selectedDays.first()
             medicine.endDate = selectedDays.last()
