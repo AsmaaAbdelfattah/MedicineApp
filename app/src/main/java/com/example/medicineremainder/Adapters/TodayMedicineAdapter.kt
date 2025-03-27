@@ -34,10 +34,22 @@ class TodayMedicineAdapter(val list: MutableList<Medicine>):RecyclerView.Adapter
         holder.binding.toggleSwitch.isActivated = list[position].remindMe
 
         when (list[position].type){
-            MedicineType.BILLS ->  holder.binding.medicineImage.setImageResource(R.drawable.ic_pill)
-            MedicineType.CREAM -> holder.binding.medicineImage.setImageResource(R.drawable.image)
-            MedicineType.INJECTION -> holder.binding.medicineImage.setImageResource(R.drawable.image)
-            MedicineType.DRINK -> holder.binding.medicineImage.setImageResource(R.drawable.image)
+            MedicineType.BILLS -> {
+                holder.binding.medicineImage.setImageResource(R.drawable.capsule)
+                holder.binding.dosageIcon.setImageResource(R.drawable.ic_pill)
+            }
+            MedicineType.CREAM -> {
+                holder.binding.medicineImage.setImageResource(R.drawable.cream)
+                holder.binding.dosageIcon.setImageResource(R.drawable.ic_cream)
+            }
+            MedicineType.INJECTION -> {
+                holder.binding.medicineImage.setImageResource(R.drawable.injection)
+                holder.binding.dosageIcon.setImageResource(R.drawable.ic_pen)
+            }
+            MedicineType.DRINK -> {
+                holder.binding.medicineImage.setImageResource(R.drawable.drink)
+                holder.binding.dosageIcon.setImageResource(R.drawable.ic_drink)
+            }
         }
 
     }

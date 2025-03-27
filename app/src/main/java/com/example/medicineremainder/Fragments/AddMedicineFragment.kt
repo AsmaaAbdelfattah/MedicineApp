@@ -3,7 +3,6 @@ package com.example.medicineremainder.Fragments
 
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.medicineremainder.Adapters.CalendarAdapter
 import com.example.medicineremainder.Model.Medicine
@@ -20,7 +18,6 @@ import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.FirebaseManager
 import com.example.medicineremainder.databinding.FragmentAddMedicineBinding
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
@@ -64,8 +61,9 @@ class AddMedicineFragment : Fragment() {
           binding.saveBtn.setOnClickListener {
               if (validateData()){
                   medicine.medicineId = UUID.randomUUID().toString()
-
+                binding.progressBar.visibility = View.VISIBLE
                   FirebaseManager.addMedicineToUser(requireContext(),medicine){ success ->
+                      binding.progressBar.visibility = View.GONE
                  if (success) {
                      FirebaseManager.currentUserFromDB(requireContext()){ user ->
                          if (user != null) {
@@ -185,19 +183,26 @@ fun getDaysOfMonth(): Pair<List<String>, List<String>> {
 }
     //TODO handle create time picker
     fun showTimePicker() {
+        val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
+
         val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHour, selectedMinute ->
-            // Format the selected time and set it to the EditText
-            val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
-            // Append the selected time to the EditText
+            // Convert to 12-hour format & get AM/PM
+            val formattedTime = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(
+                Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, selectedHour)
+                    set(Calendar.MINUTE, selectedMinute)
+                }.time
+            )
+
+            // Set the selected time
             medicine.time = formattedTime
-            val currentText =  resources.getText( R.string.please_select_dates_for_reminder)
-            binding.selectTime.setText("$currentText, ${ " " + formattedTime}") // Append with a comma and space
 
-            // Save the selected time as needed (e.g., in SharedPreferences)
-        }, hour, minute, true)
+            val currentText = resources.getText(R.string.please_select_dates_for_reminder)
+            binding.selectTime.setText("$currentText, $formattedTime") // Append selected time
 
+        }, hour, minute, false) // `false` forces 12-hour format
 
         timePickerDialog.show()
     }
@@ -210,13 +215,13 @@ fun getDaysOfMonth(): Pair<List<String>, List<String>> {
         }else{
             medicine.name = binding.mediceNameEt.text.toString()
         }
-        if (binding.doseEdit.text.isEmpty()) {
-            Toast.makeText(requireContext(),
-                getString(R.string.please_enter_medicine_name), Toast.LENGTH_SHORT).show()
-            return false
-        }else{
+//        if (binding.doseEdit.text.isEmpty()) {
+//            Toast.makeText(requireContext(),
+//                getString(R.string.please_enter_medicine_name), Toast.LENGTH_SHORT).show()
+//            //return false
+//        }else{
             medicine.dose = binding.doseEdit.text.toString()
-        }
+        //}
         if (selectedDays.size == 0){
             Toast.makeText(requireContext(),
                 getString(R.string.please_select_dates_for_reminder),Toast.LENGTH_SHORT).show()

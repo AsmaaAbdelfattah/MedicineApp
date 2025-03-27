@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.medicineremainder.Adapters.TodayMedicineAdapter
 import com.example.medicineremainder.Model.Medicine
@@ -37,11 +38,11 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater,container,false)
         binding.time.text = getCurrentTimeFormatted()
-
+        binding.progressBar.visibility = View.VISIBLE
          FirebaseManager.currentUserFromDB(requireContext()){ user ->
+             binding.progressBar.visibility = View.GONE
              if (user != null) {
                  bindUser(user)
-
              }
          }
 
@@ -53,6 +54,7 @@ class HomeFragment : Fragment() {
             binding.welcome.text = getString(R.string.hi) + " " + user.name + "\n" + getString(R.string.stay_connrcted_with_your_health)
             newsList = filterMedicinesForToday(user.medicine).toMutableList()
             adapter = TodayMedicineAdapter(newsList)
+             binding.todayRecycler.layoutManager  = LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false)
              binding.todayRecycler.adapter = adapter
              adapter.notifyDataSetChanged()
      }
@@ -65,23 +67,15 @@ class HomeFragment : Fragment() {
     }
     //TODO filter medicine list
     fun filterMedicinesForToday(medicines: MutableList<Medicine>): List<Medicine> {
-        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
-        return medicines.filter { medicine ->
-            val startDate = medicine.startDate
-            val endDate = medicine.endDate
-            val frequency = medicine.frequency
+        return medicines.distinctBy { it.medicineId } // Ensure unique medicines by name
+            .filter { medicine ->
+                val startDate = medicine.startDate ?: return@filter false
+                val endDate = medicine.endDate ?: return@filter false
 
-            // Medicine must have a valid start date
-            if (startDate.isNullOrEmpty()) return@filter false
-
-            // Check if today is within the medicine's duration
-            val isWithinRange = (startDate <= today) && (endDate.isNullOrEmpty() || today <= endDate)
-
-            // If frequency is set, check if today matches the schedule
-            val isScheduledToday = frequency?.contains(today) ?: true
-
-            isWithinRange && isScheduledToday
-        }
+                // Check if today falls within the medicine's scheduled range
+                todayDate >= startDate && todayDate <= endDate
+            }
     }
 }

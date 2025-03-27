@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card_view"
+    android:layout_margin="6dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -18,8 +19,8 @@
         android:id="@+id/medicineImage"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        app:layout_constraintWidth_percent="0.24"
-        android:layout_marginHorizontal="8dp"
+        app:layout_constraintWidth_percent="0.16"
+        android:layout_marginEnd="8dp"
         android:src="@drawable/image"
         app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintBottom_toBottomOf="parent"
@@ -28,17 +29,18 @@
 
     <TextView
         android:id="@+id/medicineTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:maxLines="2"
         android:gravity="start"
-        android:fontFamily="@font/tajawal_medium"
-        android:textSize="16sp"
+        android:fontFamily="@font/tajawal_bold"
+        android:textSize="14sp"
         android:textColor="@color/black"
         android:layout_height="35dp"
         android:layout_marginTop="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/medicineImage"
         app:layout_constraintEnd_toEndOf="parent"
+
         />
     <LinearLayout
         android:id="@+id/dosage_time_layout"
@@ -51,8 +53,9 @@
 
         <!-- Dosage Icon -->
         <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:id="@+id/dosage_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/ic_pill"
             android:contentDescription="Dosage Icon" />
 
@@ -63,6 +66,7 @@
             android:layout_height="wrap_content"
             android:text="1 tablet"
             android:textSize="14sp"
+            android:fontFamily="@font/tajawal_regular"
             android:textColor="@color/black"
             android:layout_marginStart="4dp" />
 
@@ -81,7 +85,7 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/tajawal_light"
+            android:fontFamily="@font/tajawal_regular"
             android:text="08:30 AM"
             android:textSize="14sp"
             android:textColor="@color/black"
@@ -94,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/medicineTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         android:thumbTint="@color/darkPurpleColor"
         android:trackTint="@color/lightPurple" />

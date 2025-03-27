@@ -12,7 +12,6 @@ import com.example.medicineremainder.Model.User
 import com.example.medicineremainder.Model.MedicineType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 object FirebaseManager {
@@ -182,14 +181,16 @@ object FirebaseManager {
                             medicineId = data["medicineId"] as? String ?: return@mapNotNull null,
                             name = data["name"] as? String ?: "",
                             endDate = data["endDate"] as? String ?: "",
-                            dose = data["dose"] as? String ?: "",
+                            dose = data["dose"] as? String ?: "", //optional
                             remindMe = data["remindMe"] as? Boolean ?: false,
                             startDate = data["startDate"] as? String ?: "",
                             takenDates = (data["takenDates"] as? List<String>)?.toMutableList() ?: mutableListOf(),
                             frequency = data["frequency"] as? String ?: "",
                             time = data["time"] as? String ?: "", // Optional
                             notes = data["notes"] as? String, // Optional
-                            type = (data["type"] as? Long)?.toInt()?.let { MedicineType.values().getOrNull(it) } ?: MedicineType.BILLS
+                            type = (data["type"] as? Int)?.let { intType ->
+                                MedicineType.values().firstOrNull { it.type == intType } ?: MedicineType.BILLS
+                            } ?: MedicineType.BILLS
                         )
                     } catch (e: Exception) {
                         Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
@@ -220,7 +221,7 @@ object FirebaseManager {
                         "frequency" to medicine.frequency,
                         "time" to medicine.time, // Optional
                         "notes" to medicine.notes, // Optional
-                        "type" to medicine.type.ordinal
+                        "type" to medicine.type?.ordinal
                     )
                 }
 
