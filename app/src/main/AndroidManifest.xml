@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
+<!--    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>-->
+<!--    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>-->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -36,13 +38,17 @@
             android:name=".Activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.MedicineRemainder" />
-        <receiver android:name="com.example.medicineremainder.recivers.AlarmReceiver"/>
+        <receiver android:name="com.example.medicineremainder.recivers.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"
+            />
         <receiver
             android:name="com.example.medicineremainder.recivers.BootReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
+
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

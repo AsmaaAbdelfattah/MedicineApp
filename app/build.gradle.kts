@@ -82,5 +82,6 @@ dependencies {
 //
 //    // The view calendar library for Android
 //    implementation("com.kizitonwose.calendar:view:2.0.1")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }

@@ -9,6 +9,7 @@ object TimeHelper {
     fun getCurrentTimeFormatted(): String {
         val calendar = Calendar.getInstance()
         val formatter = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
-        return formatter.format(calendar.time)
+        val formattedTime = formatter.format(calendar.time)
+        return formattedTime.toLowerCase(Locale.ENGLISH)
     }
 }

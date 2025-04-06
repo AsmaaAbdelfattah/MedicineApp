@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.medicineremainder.Fragments.HomeFragment
 import com.example.medicineremainder.Fragments.MedicationsFragment
 import com.example.medicineremainder.Fragments.AddMedicineFragment
+import com.example.medicineremainder.Fragments.StatisticsFragment
 import com.example.medicineremainder.R
 import com.example.medicineremainder.databinding.MainActivityBinding
 
@@ -27,6 +28,7 @@ lateinit var homeBinding: MainActivityBinding
                   R.id.home -> replaceFragment(HomeFragment())
                   R.id.medicines -> replaceFragment(MedicationsFragment())
                   R.id.addMed -> replaceFragment(AddMedicineFragment())
+                  R.id.stat -> replaceFragment(StatisticsFragment())
                   else ->{
 
                   }

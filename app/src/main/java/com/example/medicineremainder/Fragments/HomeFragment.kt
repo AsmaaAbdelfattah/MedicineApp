@@ -77,6 +77,7 @@ class HomeFragment : Fragment() {
                 todayDate >= startDate && todayDate <= endDate
             }
     }
+
     fun handleValidateALarm(){
        newsList.forEach { medicine ->
          if ( medicine.time == currentTime )

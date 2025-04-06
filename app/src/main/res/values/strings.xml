@@ -41,4 +41,10 @@
         <item>"12 hr"</item>>
         <item>"8 hr"</item>>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Reports">Reports</string>
+    <string name="not_taken">Not Taken</string>
+    <string name="Taken">Taken</string>
+    <string name="Statistics">Statisitics</string>
 </resources>

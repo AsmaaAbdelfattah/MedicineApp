@@ -26,7 +26,9 @@ object AlarmHelper {
             context, medicine.medicineId.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, convertTimeToMillis(medicine.time), pendingIntent)
+
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+            convertTimeToMillis(medicine.time), pendingIntent)
 
     }
 
@@ -44,7 +46,7 @@ object AlarmHelper {
         val calendar = Calendar.getInstance()
 
         try {
-            val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            val sdf = SimpleDateFormat("hh:mm a", Locale.ENGLISH)
             val date = sdf.parse(time)
 
             if (date != null) {
@@ -67,14 +69,26 @@ object AlarmHelper {
         return calendar.timeInMillis
     }
     fun getALarms(context: Context){
-        val user = SharedPrefHelper(context).getUser()
-        val currentTime = TimeHelper.getCurrentTimeFormatted()
+        val user = SharedPrefHelper(context).getUser ()
+        val currentTimeMillis = System.currentTimeMillis()
+
         user?.medicine?.forEach { medicine ->
-                if (medicine.time == currentTime) {
-                    Log.d("AlarmHelper", "Setting alarm for medicine: ${medicine.name}")
-                       setAlarm(context, medicine)
-                    }
-                }
+            val alarmTimeMillis = convertTimeToMillis(medicine.time)
+
+            // Check if the alarm time is in the future
+            if (alarmTimeMillis > currentTimeMillis) {
+                Log.d(
+                    "AlarmHelper",
+                    "Setting alarm for medicine: ${medicine.name} at $alarmTimeMillis"
+                )
+                setAlarm(context, medicine)
+            } else {
+                Log.d(
+                    "AlarmHelper",
+                    "Skipping alarm for medicine: ${medicine.name} as the time has already passed."
+                )
+            }
         }
+    }
     }
 

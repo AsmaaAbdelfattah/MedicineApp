@@ -35,6 +35,10 @@
     <string name="saved_successfully">Save Suucessfully</string>
     <string name="enter_medicine_dose">Enter Medicine Dose</string>
     <string name="please_choose_time">Please choose time for remonder</string>
+    <string name="Reports">Reports</string>
+    <string name="not_taken">Not Taken</string>
+    <string name="Taken">Taken</string>
+    <string name="Statistics">Statisitics</string>
     <string-array name="intervalsList">
         <item>"٢٤ ساعة"</item>>
         <item>"١٢ ساعة"</item>>
