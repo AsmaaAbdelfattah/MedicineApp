@@ -10,6 +10,7 @@
     <color name="background">#F5F5F5</color>
     <color name="green">#65B065</color>
     <color name="colorSecondary">#B5AAEA</color>
-
+<color name="customLightPurple">#E3E1FA</color>
     <color name="clear">#F4FAFC</color>
+
 </resources>

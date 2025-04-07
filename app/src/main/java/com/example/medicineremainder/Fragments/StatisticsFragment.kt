@@ -5,11 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
+import com.example.medicineremainder.Model.Medicine
 import com.example.medicineremainder.R
+import com.example.medicineremainder.Utilities.SharedPrefHelper
+import com.example.medicineremainder.Utilities.TimeHelper
 import com.example.medicineremainder.databinding.FragmentStatisticsBinding
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 
 
@@ -24,29 +31,48 @@ class StatisticsFragment : Fragment() {
         setupChart()
         return binding.root
     }
+
+
+
     fun setupChart() {
-        val takenData = listOf(10f, 12f, 8f, 9f) // Example data for "Taken"
-        val notTakenData = listOf(5f, 3f, 4f, 2f) // Example data for "Not Taken"
+        val medicines: List<Medicine> = SharedPrefHelper(requireContext()).getUser()?.medicine ?: emptyList()
 
-        val takenEntries = takenData.mapIndexed { index, value -> BarEntry(index.toFloat(), value) }
-        val notTakenEntries = notTakenData.mapIndexed { index, value -> BarEntry(index.toFloat(), value) }
+        val entries = ArrayList<BarEntry>()
+        val labels = ArrayList<String>()
 
-        val takenDataSet = BarDataSet(takenEntries, "Taken").apply {
-            color = resources.getColor(R.color.mainAppColor)
+        for ((index, med) in medicines.withIndex()) {
+            val totalDays = TimeHelper.getAllDatesBetween(med.startDate, med.endDate).size
+            val takenDays = med.takenDates.distinct().size
+
+            val takenPercent = (takenDays.toFloat() / totalDays.toFloat()) * 100f
+            val remainingPercent = 100f - takenPercent
+
+            entries.add(BarEntry(index.toFloat(), floatArrayOf(takenPercent, remainingPercent)))
+            labels.add(med.name)
         }
 
-        val notTakenDataSet = BarDataSet(notTakenEntries, "Not Taken").apply {
-            color = resources.getColor(R.color.lightPurple)
-        }
+        val dataSet = BarDataSet(entries, "")
+        val takenColor = ContextCompat.getColor(requireContext(), R.color.mainAppColor)
+        val remainingColor = ContextCompat.getColor(requireContext(), R.color.customLightPurple)
+        dataSet.setColors(takenColor, remainingColor)
+       dataSet.stackLabels = arrayOf("Taken", "Missed")
 
-        val dataSet = ArrayList<BarDataSet>().apply {
-            add(takenDataSet)
-            add(notTakenDataSet)
-        }
+        val barData = BarData(dataSet)
+        barData.barWidth = 0.75f
 
-        val barData = BarData(dataSet as List<IBarDataSet>?)
         binding.barChart.data = barData
-        binding.barChart.invalidate() // refresh
+        binding.barChart.description.isEnabled = false
+        binding.barChart.setFitBars(true)
+
+        val xAxis = binding.barChart.xAxis
+        xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.granularity = 1f
+        xAxis.setDrawGridLines(false)
+
+        binding.barChart.axisLeft.axisMaximum = 100f
+        binding.barChart.axisRight.isEnabled = false
+        binding.barChart.invalidate()
     }
 
 }

@@ -12,11 +12,12 @@
         android:id="@+id/reportView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingTop="35dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@color/mainAppColor"
-        app:layout_constraintHeight_percent = "0.1"
+        app:layout_constraintHeight_percent = "0.12"
         >
     <TextView
         android:layout_width="match_parent"
@@ -24,13 +25,14 @@
         android:textSize="30sp"
         android:fontFamily="@font/tajawal_extrabold"
         android:textColor="@color/white"
-        android:layout_margin="10dp"
+        android:layout_marginHorizontal="10dp"
         android:text="@string/Reports"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="match_parent"
@@ -38,57 +40,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/reportView"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="15dp"
-        app:layout_constraintHeight_percent = "0.7"
+        android:padding="10dp"
         />
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barChart"
-        android:layout_margin="10dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginHorizontal="20dp"
-            app:layout_constraintWidth_percent = "0.5"
-            >
-        <View
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="@color/mainAppColor"
-            android:background="@drawable/box" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Taken"
-            android:fontFamily="@font/tajawal_medium"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            app:layout_constraintWidth_percent = "0.5">
-            <View
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="4dp"
-                android:backgroundTint="@color/lightPurple"
-                android:background="@drawable/box" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/not_taken"
-                android:fontFamily="@font/tajawal_medium"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-        </LinearLayout>
-    </LinearLayout>
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linear"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/barChart"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:orientation="horizontal"-->
+<!--        >-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginHorizontal="20dp"-->
+<!--            app:layout_constraintWidth_percent = "0.5"-->
+<!--            >-->
+<!--        <View-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginEnd="4dp"-->
+<!--            android:backgroundTint="@color/mainAppColor"-->
+<!--            android:background="@drawable/box" />-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/Taken"-->
+<!--            android:fontFamily="@font/tajawal_medium"-->
+<!--            android:textColor="@android:color/black"-->
+<!--            android:textSize="18sp" />-->
+<!--        </LinearLayout>-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="50dp"-->
+<!--            app:layout_constraintWidth_percent = "0.5">-->
+<!--            <View-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginEnd="4dp"-->
+<!--                android:backgroundTint="@color/lightPurple"-->
+<!--                android:background="@drawable/box" />-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/not_taken"-->
+<!--                android:fontFamily="@font/tajawal_medium"-->
+<!--                android:textColor="@android:color/black"-->
+<!--                android:textSize="18sp" />-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
