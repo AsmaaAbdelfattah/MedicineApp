@@ -47,4 +47,6 @@
     <string name="not_taken">Not Taken</string>
     <string name="Taken">Taken</string>
     <string name="Statistics">Statisitics</string>
+    <string name="MyMedicines">My Medicines</string>
+    <string name="totalmedicines">Total Medicines</string>
 </resources>
