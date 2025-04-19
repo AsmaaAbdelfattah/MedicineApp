@@ -61,7 +61,7 @@ class AddMedicineFragment : Fragment() {
           binding.saveBtn.setOnClickListener {
               if (validateData()){
                   medicine.medicineId = UUID.randomUUID().toString()
-                binding.progressBar.visibility = View.VISIBLE
+                  binding.progressBar.visibility = View.VISIBLE
                   FirebaseManager.addMedicineToUser(requireContext(),medicine){ success ->
                       binding.progressBar.visibility = View.GONE
                  if (success) {
