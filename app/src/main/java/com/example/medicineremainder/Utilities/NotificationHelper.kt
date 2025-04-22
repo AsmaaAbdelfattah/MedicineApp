@@ -3,36 +3,39 @@ package com.example.medicineremainder.Utilities
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import com.example.medicineremainder.R
 import com.example.medicineremainder.Model.Medicine
 
 object NotificationHelper {
-    private const val CHANNEL_ID = "medicine_reminder_channel"
+     fun showNotification(context: Context, medicineName: String) {
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    fun showNotification(context: Context, medicine: Medicine) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationId = 1
 
+        val notificationChannelId = "med_reminder_channel"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID,
-                "Medicine Reminders",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Reminders to take medicine"
-            }
+                notificationChannelId,
+                "Medication Reminders",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_pill)
-            .setContentTitle("Time for your medicine!")
-            .setContentText("${medicine.name} - ${medicine.dose}")
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
+        val notification = NotificationCompat.Builder(context, notificationChannelId)
+            .setContentTitle("Time to take your medicine")
+            .setContentText("It's time to take: $medicineName")
+            .setSmallIcon(R.drawable.icon)
+            .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)  // Set sound
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
-        notificationManager.notify(medicine.medicineId.hashCode(), notification)
+        notificationManager.notify(notificationId, notification)
     }
-}
+
+   }
