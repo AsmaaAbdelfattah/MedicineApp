@@ -1,8 +1,4 @@
-//fun RepositoryHandler.tomtomArtifactory() {
-//    maven("https://repositories.tomtom.com/artifactory/maven") {
-//        content { includeGroupByRegex("com\\.tomtom\\..+") }
-//    }
-//}
+
 pluginManagement {
     repositories {
         google {
@@ -11,6 +7,13 @@ pluginManagement {
                 includeGroupByRegex("com\\.google.*")
                 includeGroupByRegex("androidx.*")
             }
+        }
+        maven {
+            credentials {
+                username = "asmaa_fattah"
+                password = "131313@Gmail.com"
+            }
+            url = uri("https://repositories.tomtom.com/artifactory/maven")
         }
         mavenCentral()
         gradlePluginPortal()
@@ -23,18 +26,17 @@ dependencyResolutionManagement {
        // tomtomArtifactory()
         google()
         mavenCentral()
+        gradlePluginPortal()
+                maven { url = uri("https://jitpack.io") }
         maven {
-            url = uri("https://jitpack.io")
+            credentials {
+                username = "asmaa_fattah"
+                password = "131313@Gmail.com"
+            }
+            url = uri("https://repositories.tomtom.com/artifactory/maven")
         }
-//        maven { url = uri("https://repo.tomtom.com/artifactory/gradle")
-//
-//            credentials {
-//                username = "asmaa_fattah"
-//                password = "131313@Gmail.com"
-//            }
-//        } // Required for TomTom SDK
 
-        jcenter()
+     //   jcenter()
 
     }
 

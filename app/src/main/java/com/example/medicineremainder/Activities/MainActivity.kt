@@ -74,33 +74,52 @@ class MainActivity : AppCompatActivity() {
             if (user != null) {
                 SharedPrefHelper(this).saveUser(user)
                 user.medicine.forEach { medicine ->
-                    scheduleAlarm(medicine)
+                    scheduleMedicineReminder(medicine)
                 }
             }
         }
     }
+    private fun scheduleMedicineReminder(medicine: Medicine) {
+        val dateString = medicine.startDate // "yyyy-MM-dd"
+        val timeString = medicine.time // "hh:mm a", e.g., "06:30 AM"
 
-    private fun scheduleAlarm(medicine: Medicine) {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date = dateFormat.parse(medicine.startDate) ?: return
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
+        val dateTime = dateFormat.parse("$dateString $timeString") ?: return
+        val triggerAtMillis = dateTime.time
+        val delay = triggerAtMillis - System.currentTimeMillis()
 
-        val timeFormat = DateTimeFormatter.ofPattern("hh:mm a")
-        val parsedTime = LocalTime.parse(medicine.time, timeFormat)
+        if (delay <= 0) return // skip past reminders
 
-        val calendar = Calendar.getInstance().apply {
-            time = date
-            set(Calendar.HOUR_OF_DAY, parsedTime.hour)
-            set(Calendar.MINUTE, parsedTime.minute)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
+        val inputData = workDataOf("medicine_name" to medicine.name)
 
-            if (before(Calendar.getInstance())) {
-                add(Calendar.DAY_OF_MONTH, 1)
-            }
-        }
+        val reminderRequest = OneTimeWorkRequest.Builder(MedicineReminderWorker::class.java)
+            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+            .setInputData(inputData)
+            .build()
 
-        setAlarm(calendar.timeInMillis, medicine.name)
+        WorkManager.getInstance(applicationContext).enqueue(reminderRequest)
     }
+//    private fun scheduleAlarm(medicine: Medicine) {
+//        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+//        val date = dateFormat.parse(medicine.startDate) ?: return
+//
+//        val timeFormat = DateTimeFormatter.ofPattern("hh:mm a")
+//        val parsedTime = LocalTime.parse(medicine.time, timeFormat)
+//
+//        val calendar = Calendar.getInstance().apply {
+//            time = date
+//            set(Calendar.HOUR_OF_DAY, parsedTime.hour)
+//            set(Calendar.MINUTE, parsedTime.minute)
+//            set(Calendar.SECOND, 0)
+//            set(Calendar.MILLISECOND, 0)
+//
+//            if (before(Calendar.getInstance())) {
+//                add(Calendar.DAY_OF_MONTH, 1)
+//            }
+//        }
+//
+//        setAlarm(calendar.timeInMillis, medicine.name)
+//    }
 
     private fun setAlarm(triggerTime: Long, medicineName: String) {
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager

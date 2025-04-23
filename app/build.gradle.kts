@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.example.medicineremainder"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.medicineremainder"
@@ -50,14 +50,12 @@ android {
         kotlinCompilerExtensionVersion = "1.5.13" // Verified to work with Kotlin 2.0
     }
 
-//    packagingOptions {
-//        exclude("google/protobuf/field_mask.proto")
-//        pickFirst("lib/**/libc++_shared.so")
-//    }
+    packagingOptions {
+        pickFirst ("lib/**/libc++_shared.so")
+    }
 }
 
 dependencies {
-    // Compose BOM
     implementation(platform("androidx.compose:compose-bom:2024.02.00"))
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -90,14 +88,11 @@ dependencies {
     // MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-    // Google Maps & Location
-//    implementation("com.google.android.gms:play-services-maps:18.0.2")
-//    implementation("com.google.android.gms:play-services-location:19.0.1")
-//    implementation("com.google.android.libraries.places:places:2.4.0")
-//
-//    // TomTom SDK
-//  implementation("com.tomtom.sdk.maps:map-display:1.23.2")
-//    implementation("com.android.volley:volley:1.2.1")
+    // Location
+
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+
 
     //Worker
     implementation ("androidx.work:work-runtime-ktx:2.7.0")
