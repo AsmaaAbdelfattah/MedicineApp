@@ -7,15 +7,26 @@ import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.medicineremainder.Adapters.MoreAdapter
+import com.example.medicineremainder.Adapters.PharmacyAdapter
 import com.example.medicineremainder.Model.Constants
+import com.example.medicineremainder.Model.Feature
 import com.example.medicineremainder.Model.GeoapifyResponse
+import com.example.medicineremainder.Model.MoreData
+import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.GeoapifyService
+import com.example.medicineremainder.databinding.ActivityPharamaciesBinding
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -27,12 +38,29 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class PharmaciesActivity : AppCompatActivity() {
+    //TODO: vars
+   lateinit var binding: ActivityPharamaciesBinding
+    lateinit var adapter: PharmacyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        binding = ActivityPharamaciesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         checkPermissionsAndLocation()
+
+    }
+    fun bindPharmacies(pharmacies:List<Feature>){
+        binding.progressBar.visibility = View.GONE
+        adapter = PharmacyAdapter(pharmacies,onItemClicked = {
+           openGoogleMaps(it.properties.lat,it.properties.lon)
+        })
+        binding.moreRecycler.adapter = adapter
+        //GridLayoutManager(requireContext(),2)
+        binding.moreRecycler.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
+
+        adapter.notifyDataSetChanged()
     }
     fun fetchPharmacies() {
         val fusedLocationProvider = LocationServices.getFusedLocationProviderClient(this)
@@ -63,12 +91,13 @@ class PharmaciesActivity : AppCompatActivity() {
                 call.enqueue(object : Callback<GeoapifyResponse> {
                     override fun onResponse(call: Call<GeoapifyResponse>, response: Response<GeoapifyResponse>) {
                         if (response.isSuccessful) {
-                            response.body()?.features?.forEach {
-                                Log.d("Pharmacy", "📍 ${it.properties.name ?: "Unknown"} - ${it.properties.street}, ${it.properties.city}")
+                            response.body()?.features?.let {
+                               // runOnUiThread {
+                                    bindPharmacies(it)
+                               // }
                             }
-                        } else {
-                            Log.e("Geoapify", "Response error: ${response.code()}")
                         }
+
                     }
 
                     override fun onFailure(call: Call<GeoapifyResponse>, t: Throwable) {
@@ -103,6 +132,7 @@ fun checkPermissionsAndLocation() {
 
         task.addOnSuccessListener {
             // ✅ Permission + GPS ready — fetch data!
+            binding.progressBar.visibility = View.VISIBLE
             fetchPharmacies()
         }
 
@@ -131,10 +161,29 @@ fun checkPermissionsAndLocation() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 2001 && resultCode == RESULT_OK) {
             // ✅ GPS enabled after dialog
+            binding.progressBar.visibility = View.VISIBLE
             fetchPharmacies()
         } else {
             Toast.makeText(this, "GPS must be enabled to show nearby pharmacies", Toast.LENGTH_SHORT).show()
         }
     }
+//TODO open google maps with location of pharmacy
+fun openGoogleMaps(latitude: Double?, longitude: Double?) {
+    if (latitude != null && longitude != null) {
+        // Create the URI for Google Maps (geo URI scheme)
+        val gmmIntentUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
 
+        // Create the intent to view the location in a map app
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+
+        // Check if there's an app to handle the intent (Google Maps or other maps app)
+        if (mapIntent.resolveActivity(packageManager) != null) {
+            startActivity(mapIntent)
+        } else {
+            Toast.makeText(this, "No map application available", Toast.LENGTH_SHORT).show()
+        }
+    } else {
+        Toast.makeText(this, "Invalid coordinates", Toast.LENGTH_SHORT).show()
+    }
+}
 }

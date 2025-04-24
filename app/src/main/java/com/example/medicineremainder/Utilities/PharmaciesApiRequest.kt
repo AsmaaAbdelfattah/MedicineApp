@@ -13,7 +13,7 @@ interface GeoapifyService {
     fun getNearbyPharmacies(
         @Query("categories") categories: String = "healthcare.pharmacy",
         @Query("filter") filter: String,
-        @Query("limit") limit: Int = 10,
+        @Query("limit") limit: Int = 25,
         @Query("apiKey") apiKey: String = Constants.GEOAPIFY_API_KEY
     ): Call<GeoapifyResponse>
 }
