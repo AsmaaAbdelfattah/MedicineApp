@@ -1,6 +1,7 @@
 package com.example.medicineremainder.Activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,21 +22,39 @@ class SplashActivity : ComponentActivity() {
         setContentView(splashBinding.root)
 
         sharedPrefHelper = SharedPrefHelper(this)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (sharedPrefHelper.isUserLoggedIn()) {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-            } else {
-                val intent = Intent(this, LogInActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-        },3000)
+//        window.setFlags(
+//            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//            WindowManager.LayoutParams.FLAG_FULLSCREEN
+//        )
+//        Handler(Looper.getMainLooper()).postDelayed({
+//
+//        },3000)
 
+        val videoUri = Uri.parse("android.resource://$packageName/${R.raw.splash}")
+        splashBinding.videoView.setVideoURI(videoUri)
+
+        splashBinding.videoView.setOnCompletionListener {
+            proceedAfterSplash()
+        }
+
+        splashBinding.videoView.setOnErrorListener { _, _, _ ->
+            proceedAfterSplash()
+            true
+        }
+
+        splashBinding.videoView.start()
+
+    }
+    fun proceedAfterSplash() {
+        if (sharedPrefHelper.isUserLoggedIn()) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+
+        } else {
+            val intent = Intent(this, LogInActivity::class.java)
+            startActivity(intent)
+
+        }
+        finish()
     }
 }

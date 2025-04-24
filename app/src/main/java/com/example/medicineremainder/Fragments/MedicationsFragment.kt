@@ -43,7 +43,7 @@ class MedicationsFragment : Fragment() {
             adapter =  MedciniesAdapter((list ?: mutableListOf()) as MutableList<Medicine>, onItemSelected ={
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
 
-                FirebaseManager.deleteMedicineById(requireContext(),it, callback = {
+                FirebaseManager.deleteMedicine(requireContext(),it, callback = {
                     if (it){
                         FirebaseManager.currentUserFromDB(requireContext()){
                             sharedPrefHelper.getUser().let {

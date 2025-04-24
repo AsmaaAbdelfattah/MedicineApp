@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/card_view"
@@ -14,16 +14,16 @@
         >
      <ImageView
           android:id="@+id/more_icon"
-          android:layout_width="35dp"
-          android:layout_height="35dp"
-          android:src="@drawable/ic_pharmacy"
-
+          android:layout_width="25dp"
+          android:layout_height="25dp"
+          android:src="@drawable/ic_person"
+         android:tint="@color/darkGray"
           android:layout_margin="4dp"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent"
           app:layout_constraintBottom_toBottomOf="parent"
 
-          />
+         tools:ignore="UseAppTint" />
         <TextView
             android:id="@+id/more_title"
             android:layout_width="0dp"

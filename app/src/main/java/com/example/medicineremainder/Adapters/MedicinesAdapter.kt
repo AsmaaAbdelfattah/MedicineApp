@@ -42,7 +42,7 @@ class MedciniesAdapter(val list: MutableList<Medicine>,var onItemSelected : (Str
             }
         }
         holder.binding.deleteBtn.setOnClickListener {
-            onItemSelected(list[position].name)
+            onItemSelected(list[position].medicineId)
         }
     }
 

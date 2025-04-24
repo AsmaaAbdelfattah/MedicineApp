@@ -48,8 +48,10 @@ class HomeFragment : Fragment() {
 
     //TODO: bind user
      fun bindUser(user:User){
+
             binding.welcome.text = getString(R.string.hi) + " " + user.name + "\n" + getString(R.string.stay_connrcted_with_your_health)
              newsList = filterMedicinesForToday(user.medicine).toMutableList()
+        Toast.makeText(requireContext(),newsList.size.toString(),Toast.LENGTH_LONG).show()
              //handleValidateALarm() //TODO handle alarm
              adapter = TodayMedicineAdapter(newsList)
              binding.todayRecycler.layoutManager  = LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false)

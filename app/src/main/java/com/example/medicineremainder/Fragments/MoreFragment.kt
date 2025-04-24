@@ -32,10 +32,10 @@ class MoreFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMoreBinding.inflate(inflater,container,false)
         moreList = listOf(
-            MoreData(getString(R.string.my_profile),R.drawable.ic_pharmacy),
-            MoreData(getString(R.string.mystatistics),R.drawable.ic_pharmacy),
+            MoreData(getString(R.string.my_profile),R.drawable.ic_person),
+            MoreData(getString(R.string.mystatistics),R.drawable.ic_stat),
             MoreData(getString(R.string.pharamcies),R.drawable.ic_pharmacy),
-            MoreData(getString(R.string.change_language),R.drawable.ic_pharmacy)
+            MoreData(getString(R.string.change_language),R.drawable.ic_language)
         )
         adapter = MoreAdapter(moreList,onItemClicked = {
             when(it){
