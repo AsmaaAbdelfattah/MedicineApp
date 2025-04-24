@@ -41,7 +41,7 @@
         <item>"12 hr"</item>>
         <item>"8 hr"</item>>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
+
 
     <string name="Reports">Reports</string>
     <string name="not_taken">Not Taken</string>
@@ -49,4 +49,8 @@
     <string name="Statistics">Statisitics</string>
     <string name="MyMedicines">My Medicines</string>
     <string name="totalmedicines">Total Medicines</string>
+    <string name="my_profile">My Profile</string>
+    <string name="mystatistics">MyStatistics</string>
+    <string name="pharamcies">Pharamcies</string>
+    <string name="More">More</string>
 </resources>

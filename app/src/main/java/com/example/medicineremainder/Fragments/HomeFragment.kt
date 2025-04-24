@@ -73,11 +73,5 @@ class HomeFragment : Fragment() {
             }
     }
 
-//    fun handleValidateALarm(){
-//       newsList.forEach { medicine ->
-//         if ( medicine.time == currentTime )
-//           AlarmWorker.setAlarm(requireContext(), medicine)
-//       }
-//
-//    }
+
 }

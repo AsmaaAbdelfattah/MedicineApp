@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentManager
 import com.example.medicineremainder.Fragments.HomeFragment
 import com.example.medicineremainder.Fragments.MedicationsFragment
 import com.example.medicineremainder.Fragments.AddMedicineFragment
-import com.example.medicineremainder.Fragments.StatisticsFragment
 import com.example.medicineremainder.R
 import com.example.medicineremainder.databinding.MainActivityBinding
 import com.example.medicineremainder.recivers.AlarmReceiver
@@ -25,6 +24,7 @@ import android.net.Uri
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.example.medicineremainder.Fragments.MoreFragment
 import com.example.medicineremainder.Model.Medicine
 import com.example.medicineremainder.Utilities.FirebaseManager
 import com.example.medicineremainder.Utilities.MedicineReminderWorker
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> replaceFragment(HomeFragment())
                 R.id.medicines -> replaceFragment(MedicationsFragment())
                 R.id.addMed -> replaceFragment(AddMedicineFragment())
-                R.id.stat -> replaceFragment(StatisticsFragment())
+                R.id.more -> replaceFragment(MoreFragment())
                 else -> {}
             }
             true

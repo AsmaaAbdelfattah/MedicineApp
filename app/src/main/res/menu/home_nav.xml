@@ -12,6 +12,6 @@
     />
     <item android:title="@string/addMedicines" android:id="@+id/addMed" android:iconTint="@color/mainAppColor" android:icon="@drawable/ic_add_med"
         />
-    <item android:title="@string/Statistics" android:id="@+id/stat" android:iconTint="@color/mainAppColor" android:icon="@drawable/ic_stat"
+    <item android:title="@string/More" android:id="@+id/more" android:iconTint="@color/mainAppColor" android:icon="@drawable/ic_more"
         />
 </menu>

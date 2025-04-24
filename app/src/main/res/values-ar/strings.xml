@@ -41,6 +41,10 @@
     <string name="Statistics">Statisitics</string>
     <string name="MyMedicines">My Medicines</string>
     <string name="totalmedicines">Total Medicines</string>
+    <string name="my_profile">My Profile</string>
+    <string name="mystatistics">MyStatistics</string>
+    <string name="pharamcies">Pharamcies</string>
+    <string name="More">More</string>
     <string-array name="intervalsList">
         <item>"٢٤ ساعة"</item>>
         <item>"١٢ ساعة"</item>>
