@@ -246,66 +246,34 @@ object FirebaseManager {
         }
     }
 
-    fun editMedicineForUser(
+    fun editUserNameAndAge(
         context: Context,
-        updatedMedicine: Medicine,
+        newName: String,
+        newAge: String,
         callback: (Boolean) -> Unit
     ) {
         val sharedPrefHelper = SharedPrefHelper(context)
         val userId = sharedPrefHelper.getUser()?.userId.toString()
         val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
 
-        databaseReference.get().addOnSuccessListener { snapshot ->
-            if (snapshot.exists()) {
-                val user = snapshot.getValue(User::class.java)
-                val updatedMedicineList = user?.medicine?.toMutableList() ?: mutableListOf()
+        // Create a map of the fields to update
+        val updatedUserMap = mapOf(
+            "name" to newName,
+            "age" to newAge
+        )
 
-                // Find the medicine to edit (Assuming 'name' is unique; you can use another identifier)
-                val index = updatedMedicineList.indexOfFirst { it.name == updatedMedicine.name }
-                if (index != -1) {
-                    updatedMedicineList[index] = updatedMedicine // Update existing medicine
-                } else {
-                    callback(false) // Medicine not found
-                    return@addOnSuccessListener
-                }
-
-                // Convert MedicineType to Int before saving
-                val firebaseMedicineList = updatedMedicineList.map { medicine ->
-                    mapOf(
-                        "name" to medicine.name,
-                        "startDate" to medicine.startDate,
-                        "dose" to medicine.dose,
-                        "remindMe" to medicine.remindMe,
-                        "endDate" to medicine.endDate,
-                        "takenDates" to medicine.takenDates,
-                        "frequency" to medicine.frequency,
-                        "time" to medicine.time,
-                        "type" to medicine.type // Store enum as Int
-                    )
-                }
-
-                // Save back to Firebase
-                databaseReference.child("medicine").setValue(firebaseMedicineList)
-                    .addOnSuccessListener {
-                        Dialog.showResultDialog(context,"",  "Medicine updated successfully")
-                        Log.d("FirebaseManager", "Medicine updated successfully")
-                        callback(true)
-                    }
-                    .addOnFailureListener { e ->
-                        Dialog.showResultDialog(context,"", "Failed to update medicine")
-                        Log.e("FirebaseManager", "Failed to update medicine", e)
-                        callback(false)
-                    }
-            } else {
-                Dialog.showResultDialog(context,"", "User not found")
-                Log.e("FirebaseManager", "User not found")
+        // Update name and age only
+        databaseReference.updateChildren(updatedUserMap)
+            .addOnSuccessListener {
+                Dialog.showResultDialog(context, "", "User info updated successfully")
+                Log.d("FirebaseManager", "User name and age updated")
+                callback(true)
+            }
+            .addOnFailureListener { e ->
+                Dialog.showResultDialog(context, "", "Failed to update user info")
+                Log.e("FirebaseManager", "Error updating user info", e)
                 callback(false)
             }
-        }.addOnFailureListener { e ->
-            Dialog.showResultDialog(context,"", "Error fetching user")
-            Log.e("FirebaseManager", "Error fetching user", e)
-            callback(false)
-        }
     }
     fun deleteMedicineFromUser(context: Context, medicineId: String, callback: (Boolean) -> Unit) {
         val sharedPrefHelper = SharedPrefHelper(context)

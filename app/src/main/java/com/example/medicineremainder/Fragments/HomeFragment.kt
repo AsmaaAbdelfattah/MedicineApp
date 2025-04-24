@@ -42,7 +42,6 @@ class HomeFragment : Fragment() {
        val user = SharedPrefHelper(requireContext()).getUser()
         if (user != null) {
             bindUser(user)
-            println(user.medicine)
         }
         return binding.root
     }
@@ -61,7 +60,6 @@ class HomeFragment : Fragment() {
              binding.progressBar.visibility = View.GONE
      }
 
-
     //TODO filter medicine list
     fun filterMedicinesForToday(medicines: MutableList<Medicine>): List<Medicine> {
         val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -75,6 +73,5 @@ class HomeFragment : Fragment() {
                 todayDate >= startDate && todayDate <= endDate
             }
     }
-
 
 }

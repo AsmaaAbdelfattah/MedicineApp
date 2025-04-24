@@ -13,6 +13,7 @@ class SharedPrefHelper(context: Context) {
     companion object {
         private const val PREF_NAME = "MedicinePrefs"
         private const val KEY_USER = "user_data"  // Store a single user
+        private const val KEY_LANGUAGE = "language" // Store language preference
     }
 
     /** ✅ Save a Single User **/
@@ -41,5 +42,15 @@ class SharedPrefHelper(context: Context) {
     }
     fun isUserLoggedIn(): Boolean {
         return getUser() != null
+    }
+
+    // ✅ Save selected language (e.g., "en", "ar")
+    fun saveLanguage(languageCode: String) {
+        sharedPreferences.edit().putString(KEY_LANGUAGE, languageCode).apply()
+    }
+
+    // ✅ Get saved language (defaults to English)
+    fun getLanguage(): String? {
+        return sharedPreferences.getString(KEY_LANGUAGE, "en")
     }
 }

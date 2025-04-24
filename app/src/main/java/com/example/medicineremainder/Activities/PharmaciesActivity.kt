@@ -37,7 +37,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class PharmaciesActivity : AppCompatActivity() {
+class PharmaciesActivity : BaseActivity() {
     //TODO: vars
    lateinit var binding: ActivityPharamaciesBinding
     lateinit var adapter: PharmacyAdapter

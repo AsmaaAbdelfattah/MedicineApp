@@ -15,6 +15,7 @@ import com.example.medicineremainder.Adapters.CalendarAdapter
 import com.example.medicineremainder.Model.Medicine
 import com.example.medicineremainder.Model.MedicineType
 import com.example.medicineremainder.R
+import com.example.medicineremainder.Utilities.Dialog
 import com.example.medicineremainder.Utilities.FirebaseManager
 import com.example.medicineremainder.databinding.FragmentAddMedicineBinding
 import java.text.SimpleDateFormat
@@ -160,23 +161,27 @@ class AddMedicineFragment : Fragment() {
 //TODo handle create month days
 fun getDaysOfMonth(): Pair<List<String>, List<String>> {
     val calendar = Calendar.getInstance()
+    val monthName = SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.time)
+    val currentYear = calendar.get(Calendar.YEAR)
+
+    binding.txtMonthYear.text = monthName.toString() + " " + currentYear.toString()
+
     val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
     val days = mutableListOf<String>()
     val weekDays = mutableListOf<String>()
 
-    val weekDayNames = arrayOf("MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN")
+    val weekDayNames = arrayOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT") // corrected to match Calendar API
 
-    // Get the first day of the month
+    // Set calendar to the first day of the current month
     calendar.set(Calendar.DAY_OF_MONTH, 1)
-    val firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // Adjust for 0-based index
 
-    // Populate actual days
+    // Loop through days of the month
     for (day in 1..daysInMonth) {
         calendar.set(Calendar.DAY_OF_MONTH, day)
         val weekDayIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
 
-        days.add(formattedDate) // Store date in YYYY-MM-DD format
+        days.add(formattedDate)
         weekDays.add(weekDayNames[weekDayIndex])
     }
 
@@ -190,7 +195,8 @@ fun getDaysOfMonth(): Pair<List<String>, List<String>> {
 
         val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHour, selectedMinute ->
             // Convert to 12-hour format & get AM/PM
-            val formattedTime = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(
+            val format = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.ENGLISH)
+            val formattedTime = format.format(
                 Calendar.getInstance().apply {
                     set(Calendar.HOUR_OF_DAY, selectedHour)
                     set(Calendar.MINUTE, selectedMinute)
@@ -210,8 +216,8 @@ fun getDaysOfMonth(): Pair<List<String>, List<String>> {
     //TODO handle init screen
     fun validateData():Boolean{
         if (binding.mediceNameEt.text.isEmpty()) {
-            Toast.makeText(requireContext(),
-                getString(R.string.please_enter_medicine_name), Toast.LENGTH_SHORT).show()
+           Dialog.showResultDialog(requireContext(),"",
+                getString(R.string.please_enter_medicine_name))
             return false
         }else{
             medicine.name = binding.mediceNameEt.text.toString()
@@ -224,21 +230,21 @@ fun getDaysOfMonth(): Pair<List<String>, List<String>> {
             medicine.dose = binding.doseEdit.text.toString()
         //}
         if (selectedDays.size == 0){
-            Toast.makeText(requireContext(),
-                getString(R.string.please_select_dates_for_reminder),Toast.LENGTH_SHORT).show()
+            Dialog.showResultDialog(requireContext(), "",
+                getString(R.string.please_select_dates_for_reminder))
             return false
         }else{
             medicine.startDate = selectedDays.first()
             medicine.endDate = selectedDays.last()
         }
         if (medicine.frequency.isEmpty()) {
-            Toast.makeText(requireContext(),
-                getString(R.string.please_choose_interval), Toast.LENGTH_SHORT).show()
+            Dialog.showResultDialog(requireContext(),"",
+                getString(R.string.please_choose_interval))
             return false
         }
         if (medicine.time.isEmpty()) {
-            Toast.makeText(requireContext(),
-                getString(R.string.please_choose_time), Toast.LENGTH_SHORT).show()
+            Dialog.showResultDialog(requireContext(),"",
+                getString(R.string.please_choose_time))
             return false
         }
         return true

@@ -12,7 +12,7 @@ import com.example.medicineremainder.Utilities.SharedPrefHelper
 import com.example.medicineremainder.databinding.ActivitySplashBinding
 
 
-class SplashActivity : ComponentActivity() {
+class SplashActivity : BaseActivity() {
     lateinit var sharedPrefHelper: SharedPrefHelper
     lateinit var splashBinding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {

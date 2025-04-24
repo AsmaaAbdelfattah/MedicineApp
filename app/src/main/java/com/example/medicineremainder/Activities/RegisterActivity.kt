@@ -16,7 +16,7 @@ import com.example.medicineremainder.Model.User
 import com.example.medicineremainder.Utilities.Dialog
 import com.example.medicineremainder.Utilities.FirebaseManager
 
-class RegisterActivity : ComponentActivity() {
+class RegisterActivity : BaseActivity() {
     lateinit var firebase : FirebaseAuth
     lateinit var registerBinding: ActivityRegisterBinding
     lateinit var sharedPrefHelper: SharedPrefHelper

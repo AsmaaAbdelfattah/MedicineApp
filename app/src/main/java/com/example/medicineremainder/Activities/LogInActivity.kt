@@ -16,7 +16,7 @@ import com.example.medicineremainder.databinding.ActivityLogInBinding
 import com.google.firebase.auth.FirebaseAuth
 
 
-class LogInActivity : ComponentActivity() {
+class LogInActivity : BaseActivity() {
     lateinit var logBinding: ActivityLogInBinding
     lateinit var firebase :FirebaseAuth
     lateinit var sharedPrefHelper: SharedPrefHelper

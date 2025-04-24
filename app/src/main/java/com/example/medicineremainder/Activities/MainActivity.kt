@@ -36,7 +36,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     lateinit var homeBinding: MainActivityBinding
     lateinit var alarmManager: AlarmManager
     lateinit var pendingIntent: PendingIntent
