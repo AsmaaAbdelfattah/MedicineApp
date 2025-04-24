@@ -17,12 +17,13 @@ import com.example.medicineremainder.databinding.FragmentMedicationsBinding
 
 
 class MedicationsFragment : Fragment() {
-
+    //TODO: vars
     lateinit var binding: FragmentMedicationsBinding
     lateinit var sharedPrefHelper: SharedPrefHelper
     lateinit var adapter: MedciniesAdapter
     lateinit var list: List<Medicine>
     lateinit var user : User
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,30 +38,12 @@ class MedicationsFragment : Fragment() {
         user?.medicine.let {
             if (it != null) {
                 list = it
+                Toast.makeText(requireContext(), it[0].medicineId, Toast.LENGTH_SHORT).show()
             }
         }
         binding.total.text = list?.size.toString()
-            adapter =  MedciniesAdapter((list ?: mutableListOf()) as MutableList<Medicine>, onItemSelected ={
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-
-                FirebaseManager.deleteMedicine(requireContext(),it, callback = {
-                    if (it){
-                        FirebaseManager.currentUserFromDB(requireContext()){
-                            sharedPrefHelper.getUser().let {
-                                if (it != null) {
-                                    user = it
-                                }
-                            }
-                            user?.medicine.let {
-                                if (it != null) {
-                                    list = it
-                                }
-                            }
-                            binding.total.text = list?.size.toString()
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
-                })
+        adapter =  MedciniesAdapter((list ?: mutableListOf()) as MutableList<Medicine>, onItemSelected ={
+                deleteMedicine(it)
             })
         binding.medicinesRecycler.layoutManager = LinearLayoutManager(requireContext(),
             RecyclerView.VERTICAL,false)
@@ -69,6 +52,26 @@ class MedicationsFragment : Fragment() {
         return binding.root
     }
 
+    fun deleteMedicine(medicineID: String){
+        FirebaseManager.deleteMedicineFromUser(requireContext(),medicineID, callback = {
+
+                FirebaseManager.currentUserFromDB(requireContext()){
+                    sharedPrefHelper.getUser().let {
+                        if (it != null) {
+                            user = it
+                        }
+                    }
+                    user?.medicine.let {
+                        if (it != null) {
+                            list = it
+                        }
+                    }
+                    binding.total.text = list?.size.toString()
+                    adapter.notifyDataSetChanged()
+                }
+
+        })
+    }
 
 
 

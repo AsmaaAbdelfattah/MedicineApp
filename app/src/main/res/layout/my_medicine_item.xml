@@ -42,12 +42,12 @@
         />
         <Button
             android:id="@+id/deleteBtn"
-            android:layout_width="30dp"
+            android:layout_width="40dp"
             android:layout_height="45dp"
             android:drawablePadding="10dp"
-            android:background="@drawable/card_view"
+            android:background="@null"
             android:drawableTint="#C41E3A"
-
+            android:text=""
             android:drawableEnd="@drawable/ic_trash"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/medicineTitle"

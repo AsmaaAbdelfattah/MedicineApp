@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
        val user = SharedPrefHelper(requireContext()).getUser()
         if (user != null) {
             bindUser(user)
+            println(user.medicine)
         }
         return binding.root
     }

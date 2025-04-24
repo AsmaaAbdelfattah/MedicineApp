@@ -133,7 +133,7 @@ object FirebaseManager {
                         Log.e("Auth", "User ID is null after account creation")
                     }
                 } else {
-                    Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
+                    Dialog.showResultDialog(context,"",  task.exception.toString())
                 }
             }
     }
@@ -158,7 +158,7 @@ object FirebaseManager {
                     sharedPrefHelper.saveUser(user)
                     context.startActivity(Intent(context, MainActivity::class.java))
                 } else {
-                    Toast.makeText(context, task.exception.toString(), Toast.LENGTH_SHORT).show()
+                    Dialog.showResultDialog(context,"",  task.exception.toString())
                 }
             }
     }
@@ -229,15 +229,15 @@ object FirebaseManager {
                 // Save back to Firestore
                 userRef.update("medicine", updatedMedicineMap)
                     .addOnSuccessListener {
-                        Toast.makeText(context, "Medicine added/updated successfully", Toast.LENGTH_SHORT).show()
+                        Dialog.showResultDialog(context,"",  "Medicine added/updated successfully")
                         callback(true)
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(context, "Failed to add/update medicine", Toast.LENGTH_SHORT).show()
+                        Dialog.showResultDialog(context,"",  "Failed to add/update medicine")
                         callback(false)
                     }
             } else {
-                Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
+                Dialog.showResultDialog(context,"",  "User not found")
                 callback(false)
             }
         }.addOnFailureListener {
@@ -287,62 +287,58 @@ object FirebaseManager {
                 // Save back to Firebase
                 databaseReference.child("medicine").setValue(firebaseMedicineList)
                     .addOnSuccessListener {
-                        Toast.makeText(context, "Medicine updated successfully", Toast.LENGTH_SHORT).show()
+                        Dialog.showResultDialog(context,"",  "Medicine updated successfully")
                         Log.d("FirebaseManager", "Medicine updated successfully")
                         callback(true)
                     }
                     .addOnFailureListener { e ->
-                        Toast.makeText(context, "Failed to update medicine", Toast.LENGTH_SHORT).show()
+                        Dialog.showResultDialog(context,"", "Failed to update medicine")
                         Log.e("FirebaseManager", "Failed to update medicine", e)
                         callback(false)
                     }
             } else {
-                Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
+                Dialog.showResultDialog(context,"", "User not found")
                 Log.e("FirebaseManager", "User not found")
                 callback(false)
             }
         }.addOnFailureListener { e ->
-            Toast.makeText(context, "Error fetching user", Toast.LENGTH_SHORT).show()
+            Dialog.showResultDialog(context,"", "Error fetching user")
             Log.e("FirebaseManager", "Error fetching user", e)
             callback(false)
         }
     }
-    fun deleteMedicine(context: Context, medicineId: String, callback: (Boolean) -> Unit) {
+    fun deleteMedicineFromUser(context: Context, medicineId: String, callback: (Boolean) -> Unit) {
         val sharedPrefHelper = SharedPrefHelper(context)
         val userId = sharedPrefHelper.getUser()?.userId ?: return callback(false)
-        val db = FirebaseFirestore.getInstance()
 
-        val userRef = db.collection("Users").document(userId)
+        val firestore = FirebaseFirestore.getInstance()
+        val userRef = firestore.collection("Users").document(userId)
 
-        userRef.get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val user = document.toObject(User::class.java)
-                    val updatedMedicines = user?.medicine?.filter { it.medicineId != medicineId }
+        userRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                val existingMedicines = document.get("medicine") as? List<Map<String, Any>> ?: emptyList()
+                // Filter out the medicine with the matching ID
+                val updatedMedicines = existingMedicines.filter {
+                    it["medicineId"] != medicineId
+                }
 
-                    if (updatedMedicines != null) {
-                        userRef.update("medicine", updatedMedicines)
-                            .addOnSuccessListener {
-                                Toast.makeText(context, "Medicine deleted successfully", Toast.LENGTH_SHORT).show()
-                                callback(true)
-                            }
-                            .addOnFailureListener { e ->
-                                Toast.makeText(context,  "Failed to delete medicine: ${e.message}", Toast.LENGTH_SHORT).show()
-                                callback(false)
-                            }
-                    } else {
-                        Toast.makeText(context,  "No medicines found", Toast.LENGTH_SHORT).show()
+                // Update Firestore with the new list
+                userRef.update("medicine", updatedMedicines)
+                    .addOnSuccessListener {
+                      Dialog.showResultDialog(context,"", "Medicine deleted")
+                        callback(true)
+                    }
+                    .addOnFailureListener {
+                        Dialog.showResultDialog(context,"",  "Failed to delete medicine")
                         callback(false)
                     }
-                } else {
-                    Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
-                    callback(false)
-                }
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(context, "Failed to fetch user: ${e.message}", Toast.LENGTH_SHORT).show()
+            } else {
+                Dialog.showResultDialog(context,"", "User not found")
                 callback(false)
             }
+        }.addOnFailureListener {
+            Dialog.showResultDialog(context,"", "Error fetching user")
+            callback(false)
+        }
     }
-
 }
