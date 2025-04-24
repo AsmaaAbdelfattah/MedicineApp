@@ -32,14 +32,26 @@
         android:gravity="start"
         android:fontFamily="@font/tajawal_bold"
         android:textSize="18sp"
-
         android:layout_marginStart="6dp"
         android:textColor="@color/black"
         android:layout_height="35dp"
         android:layout_marginTop="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/medicineImg"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/deleteBtn"
         />
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="30dp"
+            android:layout_height="45dp"
+            android:drawablePadding="10dp"
+            android:background="@drawable/card_view"
+            android:drawableTint="#C41E3A"
+
+            android:drawableEnd="@drawable/ic_trash"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/medicineTitle"
+            app:layout_constraintTop_toTopOf="@id/medicineTitle"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

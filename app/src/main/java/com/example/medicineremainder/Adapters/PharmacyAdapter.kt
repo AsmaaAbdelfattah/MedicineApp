@@ -11,8 +11,6 @@ class PharmacyAdapter(val list: List<Feature>, val onItemClicked: (Feature) -> U
 
     inner class PharmacyViewHolder(val binding: PharmacyItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PharmacyViewHolder {

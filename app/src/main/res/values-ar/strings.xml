@@ -45,6 +45,9 @@
     <string name="mystatistics">MyStatistics</string>
     <string name="pharamcies">Pharamcies</string>
     <string name="More">More</string>
+    <string name="no_pharmacies_found">No Pharamices Found Nearest to you</string>
+    <string name="change_language">Change Language</string>
+    <string name="ok">Ok</string>
     <string-array name="intervalsList">
         <item>"٢٤ ساعة"</item>>
         <item>"١٢ ساعة"</item>>

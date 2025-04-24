@@ -51,6 +51,9 @@
     <string name="totalmedicines">Total Medicines</string>
     <string name="my_profile">My Profile</string>
     <string name="mystatistics">MyStatistics</string>
-    <string name="pharamcies">Pharamcies</string>
+    <string name="pharamcies">Nearest Pharamcies</string>
     <string name="More">More</string>
+    <string name="no_pharmacies_found">No Pharamices Found Nearest to you</string>
+    <string name="change_language">Change Language</string>
+    <string name="ok">Ok</string>
 </resources>

@@ -8,7 +8,7 @@ import com.example.medicineremainder.Model.MedicineType
 import com.example.medicineremainder.R
 import com.example.medicineremainder.databinding.MyMedicineItemBinding
 
-class MedciniesAdapter(val list: MutableList<Medicine>):RecyclerView.Adapter<MedciniesAdapter.MyMedicineViewHolder>() {
+class MedciniesAdapter(val list: MutableList<Medicine>,var onItemSelected : (String) -> Unit):RecyclerView.Adapter<MedciniesAdapter.MyMedicineViewHolder>() {
 
     inner class MyMedicineViewHolder(val binding: MyMedicineItemBinding): RecyclerView.ViewHolder(binding.root){
 
@@ -40,6 +40,9 @@ class MedciniesAdapter(val list: MutableList<Medicine>):RecyclerView.Adapter<Med
                 holder.binding.medicineImg.setImageResource(R.drawable.drink)
 
             }
+        }
+        holder.binding.deleteBtn.setOnClickListener {
+            onItemSelected(list[position].name)
         }
     }
 

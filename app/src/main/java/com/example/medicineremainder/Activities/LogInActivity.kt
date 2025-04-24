@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import com.example.medicineremainder.Model.User
 import com.example.medicineremainder.R
+import com.example.medicineremainder.Utilities.Dialog
 import com.example.medicineremainder.Utilities.SharedPrefHelper
 import com.example.medicineremainder.Utilities.FirebaseManager
 import com.example.medicineremainder.Utilities.ValidationUtils
@@ -40,19 +41,11 @@ class LogInActivity : ComponentActivity() {
     //TODO: validate log in
     fun validateLogIn(email:String, password: String):Boolean{
         if (email.isEmpty() || password.isEmpty()){
-            Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (password.isEmpty()){
-            Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (email.isEmpty()){
-            Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()
+            Dialog.showResultDialog(this, "", getString(R.string.please_fill_all_the_fields))
             return false
         }
         if (!ValidationUtils.isValidEmail(email)){
-            Toast.makeText(this, getString(R.string.please_Enter_valid_email), Toast.LENGTH_SHORT).show()
+            Dialog.showResultDialog(this, "", getString(R.string.please_Enter_valid_email))
             return false
         }
         return true

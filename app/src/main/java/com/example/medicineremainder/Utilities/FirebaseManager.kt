@@ -25,6 +25,7 @@ object FirebaseManager {
 
         userRef.set(user)  // Set user data to Firestore
             .addOnSuccessListener {
+
                 Log.d("Firestore", "User saved successfully with ID: ${user.userId}")
             }
             .addOnFailureListener { e ->
@@ -306,5 +307,60 @@ object FirebaseManager {
             callback(false)
         }
     }
+    fun deleteMedicineById(
+        context: Context,
+        medicineId: String,
+        callback: (Boolean) -> Unit
+    ) {
+        val userId = SharedPrefHelper(context).getUser ()?.userId.toString()
+        Log.d("FirebaseManager", "User  ID: $userId") // Log the user ID
 
+        if (userId.isEmpty()) {
+            Toast.makeText(context, "User  ID is empty", Toast.LENGTH_SHORT).show()
+            callback(false)
+            return
+        }
+
+        val databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+
+        databaseReference.get().addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                val user = snapshot.getValue(User::class.java)
+                val medicineList = user?.medicine?.toMutableList() ?: mutableListOf()
+
+                // Log the current medicine list
+                Log.d("FirebaseManager", "Current medicine list: $medicineList")
+
+                // Remove medicine with matching ID
+                val removed = medicineList.removeIf { it.name == medicineId }
+
+                if (!removed) {
+                    Toast.makeText(context, "Medicine not found", Toast.LENGTH_SHORT).show()
+                    callback(false)
+                    return@addOnSuccessListener
+                }
+
+                // Save the updated medicine list back to Firebase
+                databaseReference.child("medicine").setValue(medicineList)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Medicine deleted successfully", Toast.LENGTH_SHORT).show()
+                        Log.d("FirebaseManager", "Medicine deleted successfully")
+                        callback(true)
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(context, "Failed to delete medicine", Toast.LENGTH_SHORT).show()
+                        Log.e("FirebaseManager", "Failed to delete medicine", e)
+                        callback(false)
+                    }
+            } else {
+                Toast.makeText(context, "User  not found", Toast.LENGTH_SHORT).show()
+                Log.e("FirebaseManager", "User  not found")
+                callback(false)
+            }
+        }.addOnFailureListener { e ->
+            Toast.makeText(context, "Error fetching user", Toast.LENGTH_SHORT).show()
+            Log.e("FirebaseManager", "Error fetching user", e)
+            callback(false)
+        }
+    }
 }

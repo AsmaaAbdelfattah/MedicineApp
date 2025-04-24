@@ -92,9 +92,11 @@ class PharmaciesActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<GeoapifyResponse>, response: Response<GeoapifyResponse>) {
                         if (response.isSuccessful) {
                             response.body()?.features?.let {
-                               // runOnUiThread {
+                              if (response.body()?.features?.size!! > 0)  {
                                     bindPharmacies(it)
-                               // }
+                              }else{
+                                  Toast.makeText(this@PharmaciesActivity, getString(R.string.no_pharmacies_found), Toast.LENGTH_SHORT).show()
+                              }
                             }
                         }
 
@@ -170,20 +172,10 @@ fun checkPermissionsAndLocation() {
 //TODO open google maps with location of pharmacy
 fun openGoogleMaps(latitude: Double?, longitude: Double?) {
     if (latitude != null && longitude != null) {
-        // Create the URI for Google Maps (geo URI scheme)
-        val gmmIntentUri = Uri.parse("geo:$latitude,$longitude?q=$latitude,$longitude")
-
-        // Create the intent to view the location in a map app
-        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-
-        // Check if there's an app to handle the intent (Google Maps or other maps app)
-        if (mapIntent.resolveActivity(packageManager) != null) {
-            startActivity(mapIntent)
-        } else {
-            Toast.makeText(this, "No map application available", Toast.LENGTH_SHORT).show()
-        }
-    } else {
-        Toast.makeText(this, "Invalid coordinates", Toast.LENGTH_SHORT).show()
-    }
+        val uri = Uri.parse("google.navigation:q=$latitude,$longitude")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+       // intent.setPackage("com.google.android.apps.maps") // Optional: to ensure it opens in Google Maps
+        startActivity(intent)
 }
+    }
 }

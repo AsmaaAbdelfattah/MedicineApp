@@ -13,6 +13,7 @@ import com.example.medicineremainder.Utilities.ValidationUtils
 import com.example.medicineremainder.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.example.medicineremainder.Model.User
+import com.example.medicineremainder.Utilities.Dialog
 import com.example.medicineremainder.Utilities.FirebaseManager
 
 class RegisterActivity : ComponentActivity() {
@@ -41,27 +42,11 @@ class RegisterActivity : ComponentActivity() {
     //TODO: validate register
     fun validateRegister(email:String,name:String,age:String, password: String):Boolean{
         if (email.isEmpty() || password.isEmpty() || age.isEmpty() || name.isEmpty()){
-            Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (password.isEmpty()){
-            Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (email.isEmpty()){
-            Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (name.isEmpty()){
-            Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()
-            return false
-        }
-        if (age.isEmpty()){
-            Toast.makeText(this, getString(R.string.please_fill_all_the_fields), Toast.LENGTH_SHORT).show()
+            Dialog.showResultDialog(this, "", getString(R.string.please_fill_all_the_fields))
             return false
         }
         if (!ValidationUtils.isValidEmail(email)){
-            Toast.makeText(this, getString(R.string.please_Enter_valid_email), Toast.LENGTH_SHORT).show()
+            Dialog.showResultDialog(this, "", getString(R.string.please_Enter_valid_email))
             return false
         }
         return true
