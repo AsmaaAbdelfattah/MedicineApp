@@ -38,8 +38,8 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
     lateinit var homeBinding: MainActivityBinding
-    lateinit var alarmManager: AlarmManager
-    lateinit var pendingIntent: PendingIntent
+//    lateinit var alarmManager: AlarmManager
+//    lateinit var pendingIntent: PendingIntent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,7 @@ class MainActivity : BaseActivity() {
                 requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
             }
         }
-
+        checkExactAlarmPermission()
         getUserData()
 
         // Fragment navigation
@@ -80,47 +80,31 @@ class MainActivity : BaseActivity() {
             }
         }
     }
-    private fun scheduleMedicineReminder(medicine: Medicine) {
-        val dateString = medicine.startDate // "yyyy-MM-dd"
-        val timeString = medicine.time // "hh:mm a", e.g., "06:30 AM"
-
+    fun scheduleMedicineReminder(medicine: Medicine) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
-        val dateTime = dateFormat.parse("$dateString $timeString") ?: return
+        val dateTime = dateFormat.parse("${medicine.startDate} ${medicine.time}") ?: return
         val triggerAtMillis = dateTime.time
-        val delay = triggerAtMillis - System.currentTimeMillis()
 
-        if (delay <= 0) return // skip past reminders
+        if (triggerAtMillis <= System.currentTimeMillis()) return
 
-        val inputData = workDataOf("medicine_name" to medicine.name)
+        val intent = Intent(applicationContext, AlarmReceiver::class.java).apply {
+            putExtra("medicine_name", medicine.name)
+        }
 
-        val reminderRequest = OneTimeWorkRequest.Builder(MedicineReminderWorker::class.java)
-            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-            .setInputData(inputData)
-            .build()
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            medicine.name.hashCode(),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
-        WorkManager.getInstance(applicationContext).enqueue(reminderRequest)
+        val alarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            triggerAtMillis,
+            pendingIntent
+        )
     }
-//    private fun scheduleAlarm(medicine: Medicine) {
-//        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-//        val date = dateFormat.parse(medicine.startDate) ?: return
-//
-//        val timeFormat = DateTimeFormatter.ofPattern("hh:mm a")
-//        val parsedTime = LocalTime.parse(medicine.time, timeFormat)
-//
-//        val calendar = Calendar.getInstance().apply {
-//            time = date
-//            set(Calendar.HOUR_OF_DAY, parsedTime.hour)
-//            set(Calendar.MINUTE, parsedTime.minute)
-//            set(Calendar.SECOND, 0)
-//            set(Calendar.MILLISECOND, 0)
-//
-//            if (before(Calendar.getInstance())) {
-//                add(Calendar.DAY_OF_MONTH, 1)
-//            }
-//        }
-//
-//        setAlarm(calendar.timeInMillis, medicine.name)
-//    }
 
     private fun setAlarm(triggerTime: Long, medicineName: String) {
         val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
@@ -165,5 +149,16 @@ class MainActivity : BaseActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(homeBinding.fragmentContainer.id, fragment)
         fragmentTransaction.commit()
+    }
+    private fun checkExactAlarmPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if (!alarmManager.canScheduleExactAlarms()) {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                startActivity(intent)
+            }
+        }
     }
 }

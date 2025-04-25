@@ -309,4 +309,25 @@ object FirebaseManager {
             callback(false)
         }
     }
+    fun addTakenDate(medicineName: String, date: String) {
+        val userId = FirebaseAuth.getInstance().uid ?: return
+        val db = FirebaseFirestore.getInstance()
+        val medicineRef = db.collection("Users").document(userId)
+
+        medicineRef.get().addOnSuccessListener { document ->
+            val medicines = document.get("medicine") as? List<Map<String, Any>> ?: return@addOnSuccessListener
+
+            val updatedMedicines = medicines.map { med ->
+                if (med["name"] == medicineName) {
+                    val takenDates = (med["takenDates"] as? List<String>)?.toMutableList() ?: mutableListOf()
+                    if (!takenDates.contains(date)) takenDates.add(date)
+                    med.toMutableMap().apply { put("takenDates", takenDates) }
+                } else {
+                    med
+                }
+            }
+
+            medicineRef.update("medicine", updatedMedicines)
+        }
+    }
 }

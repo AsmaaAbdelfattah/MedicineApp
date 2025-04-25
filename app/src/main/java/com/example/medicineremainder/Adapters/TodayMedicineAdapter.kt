@@ -31,7 +31,7 @@ class TodayMedicineAdapter(val list: MutableList<Medicine>):RecyclerView.Adapter
         holder.binding.medicineTitle.text = list[position].name
         holder.binding.dose.text = list[position].dose
         holder.binding.time.text = list[position].time
-        holder.binding.toggleSwitch.isActivated = list[position].remindMe
+       // holder.binding.toggleSwitch.isActivated = list[position].remindMe
 
         when (list[position].type){
             MedicineType.BILLS -> {
