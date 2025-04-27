@@ -30,7 +30,7 @@ class MedicationsFragment : Fragment() {
     ): View? {
         binding = FragmentMedicationsBinding.inflate(inflater,container,false)
         sharedPrefHelper = SharedPrefHelper(requireContext())
-          sharedPrefHelper.getUser().let {
+        sharedPrefHelper.getUser().let {
               if (it != null) {
                   user = it
               }
