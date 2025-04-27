@@ -41,14 +41,19 @@ class MedicationsFragment : Fragment() {
                 Toast.makeText(requireContext(), it[0].medicineId, Toast.LENGTH_SHORT).show()
             }
         }
-        binding.total.text = list?.size.toString()
-        adapter =  MedciniesAdapter((list ?: mutableListOf()) as MutableList<Medicine>, onItemSelected ={
+        if (list.size > 0) {
+            binding.total.text = list?.size.toString()
+            adapter =  MedciniesAdapter((list ?: mutableListOf()) as MutableList<Medicine>, onItemSelected ={
                 deleteMedicine(it)
             })
-        binding.medicinesRecycler.layoutManager = LinearLayoutManager(requireContext(),
-            RecyclerView.VERTICAL,false)
-        binding.medicinesRecycler.adapter = adapter
-        adapter.notifyDataSetChanged()
+            binding.medicinesRecycler.layoutManager = LinearLayoutManager(requireContext(),
+                RecyclerView.VERTICAL,false)
+            binding.medicinesRecycler.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }else{
+            binding.total.text = 0.toString()
+        }
+
         return binding.root
     }
 

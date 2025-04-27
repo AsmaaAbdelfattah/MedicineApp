@@ -74,14 +74,16 @@ class MainActivity : BaseActivity() {
         FirebaseManager.currentUserFromDB(this) { user ->
             if (user != null) {
                 SharedPrefHelper(this).saveUser(user)
+
                 user.medicine.forEach { medicine ->
+
                     scheduleMedicineReminder(medicine)
                 }
             }
         }
     }
     fun scheduleMedicineReminder(medicine: Medicine) {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.ENGLISH)
         val dateTime = dateFormat.parse("${medicine.startDate} ${medicine.time}") ?: return
         val triggerAtMillis = dateTime.time
 
@@ -91,9 +93,11 @@ class MainActivity : BaseActivity() {
             putExtra("medicine_name", medicine.name)
         }
 
+        val uniqueId = (medicine.name + medicine.time + medicine.startDate).hashCode()
+
         val pendingIntent = PendingIntent.getBroadcast(
             applicationContext,
-            medicine.name.hashCode(),
+            uniqueId,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )

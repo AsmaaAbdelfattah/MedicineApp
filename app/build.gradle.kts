@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.medicineremainder"
-        minSdk = 26
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -90,7 +90,6 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     // Location
-
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
 

@@ -7,12 +7,13 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.SharedPrefHelper
 import com.example.medicineremainder.databinding.ActivitySplashBinding
 
 
-class SplashActivity : BaseActivity() {
+class SplashActivity : AppCompatActivity() {
     lateinit var sharedPrefHelper: SharedPrefHelper
     lateinit var splashBinding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {

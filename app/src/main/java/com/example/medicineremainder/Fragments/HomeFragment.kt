@@ -39,19 +39,31 @@ class HomeFragment : Fragment() {
         binding.time.text = currentTime
         binding.progressBar.visibility = View.VISIBLE
 
-       val user = SharedPrefHelper(requireContext()).getUser()
-        if (user != null) {
-            bindUser(user)
-        }
+        refreshData()
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        refreshData()
+    }
+    override fun onResume() {
+        super.onResume()
+        refreshData()
+    }
+    //TODO: refresh data
+    fun refreshData(){
+        val user = SharedPrefHelper(requireContext()).getUser()
+        if (user != null) {
+            bindUser(user)
+        }
+    }
     //TODO: bind user
      fun bindUser(user:User){
 
             binding.welcome.text = getString(R.string.hi) + " " + user.name + "\n" + getString(R.string.stay_connrcted_with_your_health)
              newsList = filterMedicinesForToday(user.medicine).toMutableList()
-        Toast.makeText(requireContext(),newsList.size.toString(),Toast.LENGTH_LONG).show()
+      //  Toast.makeText(requireContext(),newsList.size.toString(),Toast.LENGTH_LONG).show()
              //handleValidateALarm() //TODO handle alarm
              adapter = TodayMedicineAdapter(newsList)
              binding.todayRecycler.layoutManager  = LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false)
@@ -64,7 +76,7 @@ class HomeFragment : Fragment() {
     fun filterMedicinesForToday(medicines: MutableList<Medicine>): List<Medicine> {
         val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
-        return medicines.distinctBy { it.medicineId } // Ensure unique medicines by name
+        return medicines
             .filter { medicine ->
                 val startDate = medicine.startDate ?: return@filter false
                 val endDate = medicine.endDate ?: return@filter false

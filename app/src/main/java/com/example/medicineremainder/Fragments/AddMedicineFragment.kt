@@ -201,7 +201,7 @@ fun getDaysOfMonth(): Pair<List<String>, List<String>> {
                     set(Calendar.HOUR_OF_DAY, selectedHour)
                     set(Calendar.MINUTE, selectedMinute)
                 }.time
-            )
+            ).lowercase(Locale.ENGLISH)
 
             // Set the selected time
             medicine.time = formattedTime

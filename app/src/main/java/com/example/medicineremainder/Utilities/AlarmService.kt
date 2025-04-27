@@ -11,28 +11,29 @@ import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.medicineremainder.Activities.AlarmActivity
 import com.example.medicineremainder.R
-import android.content.pm.ServiceInfo
 
 class AlarmForegroundService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val medicineName = intent.getStringExtra("medicine_name") ?: "Your medicine"
+        val medicineName = intent.getStringExtra("medicine_name") ?: "medicine"
+        val uniqueId = intent.getIntExtra("medicine_unique_id", -1)
 
-        // Create a persistent notification
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        Log.d("AlarmForegroundService", "Showing notification for $medicineName (ID: $uniqueId)")
+
         val channelId = "medicine_reminder_channel"
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Create the notification channel if the app is running on Android Oreo or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
                 "Medicine Reminder",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = "Channel for medicine reminders"
+                description = "Channel for reminding medicines"
                 enableLights(true)
                 lightColor = Color.BLUE
                 enableVibration(true)
@@ -40,9 +41,8 @@ class AlarmForegroundService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        // Build the notification
         val notification: Notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.icon)  // Your app's icon
+            .setSmallIcon(R.drawable.icon)
             .setContentTitle("Time to take your medicine")
             .setContentText(medicineName)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -50,18 +50,10 @@ class AlarmForegroundService : Service() {
             .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
             .build()
 
-        // Start the service in the foreground with a persistent notification
-        startForeground(1, notification)
-
-        // Start the AlarmActivity (full-screen)
-        val activityIntent = Intent(this, AlarmActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            putExtra("medicine_name", medicineName)
-        }
-        startActivity(activityIntent)
+        startForeground(uniqueId, notification) // <-- startForeground using the uniqueId
 
         return START_NOT_STICKY
     }
 
-        override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 }

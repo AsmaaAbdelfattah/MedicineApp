@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.example.medicineremainder.Activities.AlarmActivity
@@ -21,21 +22,23 @@ import com.example.medicineremainder.Utilities.AlarmForegroundService
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val medicineName = intent.getStringExtra("medicine_name") ?: "Your medicine"
+        val uniqueId = intent.getIntExtra("medicine_unique_id", -1) // Default -1 if not found
 
-        // Optional: Toast for debugging (can be removed in production)
-//        Toast.makeText(context, "Reminder: $medicineName", Toast.LENGTH_SHORT).show()
-//
-//        showNotification(context, medicineName)
+        // Debug
+        Log.d("AlarmReceiver", "Received reminder for medicine: $medicineName with ID: $uniqueId")
 
         val serviceIntent = Intent(context, AlarmForegroundService::class.java).apply {
             putExtra("medicine_name", medicineName)
+            putExtra("medicine_unique_id", uniqueId)
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(serviceIntent)
         } else {
             context.startService(serviceIntent)
         }
     }
+
 
     private fun showNotification(context: Context, medicineName: String) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

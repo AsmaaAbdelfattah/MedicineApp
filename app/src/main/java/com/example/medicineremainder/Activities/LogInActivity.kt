@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import com.example.medicineremainder.Model.User
 import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.Dialog
@@ -16,7 +17,7 @@ import com.example.medicineremainder.databinding.ActivityLogInBinding
 import com.google.firebase.auth.FirebaseAuth
 
 
-class LogInActivity : BaseActivity() {
+class LogInActivity : AppCompatActivity() {
     lateinit var logBinding: ActivityLogInBinding
     lateinit var firebase :FirebaseAuth
     lateinit var sharedPrefHelper: SharedPrefHelper

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import com.example.medicineremainder.Model.MedicineType
 import com.example.medicineremainder.R
 import com.example.medicineremainder.Utilities.SharedPrefHelper
@@ -16,26 +17,28 @@ import com.example.medicineremainder.Model.User
 import com.example.medicineremainder.Utilities.Dialog
 import com.example.medicineremainder.Utilities.FirebaseManager
 
-class RegisterActivity : BaseActivity() {
+class RegisterActivity : AppCompatActivity() {
     lateinit var firebase : FirebaseAuth
     lateinit var registerBinding: ActivityRegisterBinding
-    lateinit var sharedPrefHelper: SharedPrefHelper
+    //lateinit var sharedPrefHelper: SharedPrefHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         registerBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(registerBinding.root)
+        enableEdgeToEdge()
         firebase = FirebaseAuth.getInstance()
-        sharedPrefHelper = SharedPrefHelper(this)
+      //  sharedPrefHelper = SharedPrefHelper(this)
 
-            registerBinding.registerBtn.setOnClickListener {
+        registerBinding.registerBtn.setOnClickListener {
 
                 val email = registerBinding.email.text.toString()
                 val name = registerBinding.userName.text.toString()
                 val age = registerBinding.age.text.toString()
                 val password = registerBinding.password.text.toString()
                 if (validateRegister(email,name,age,password)){
-                    FirebaseManager.createUserWithEmailAndPassword(this,name,email,age.toInt(),password,registerBinding.progressBar,sharedPrefHelper)
+                    FirebaseManager.createUserWithEmailAndPassword(this,name,email,age.toInt(),password,registerBinding.progressBar,
+                        SharedPrefHelper(this)
+                    )
                }
              }
     }

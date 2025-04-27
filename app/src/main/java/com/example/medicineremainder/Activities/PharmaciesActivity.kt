@@ -79,7 +79,7 @@ class PharmaciesActivity : BaseActivity() {
                 val lat = location.latitude
                 val lon = location.longitude
                 val filter = "circle:$lon,$lat,5000" // 5km radius
-
+Toast.makeText(this,"lat: $lat lon: $lon",Toast.LENGTH_LONG).show()
                 val retrofit = Retrofit.Builder()
                     .baseUrl(Constants.GEOAPIFY_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())

@@ -40,10 +40,14 @@
         <activity
             android:name=".Activities.RegisterActivity"
             android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.MedicineRemainder" />
         <activity
             android:name=".Activities.LogInActivity"
             android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.MedicineRemainder" />
         <activity
             android:name=".Activities.SplashActivity"
@@ -62,8 +66,10 @@
         <activity
             android:name=".Activities.AlarmActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <receiver
             android:name=".recivers.AlarmReceiver"
@@ -75,7 +81,7 @@
         <service
             android:name=".Utilities.AlarmForegroundService"
             android:exported="false"
-            android:foregroundServiceType="specialUse"
+            android:foregroundServiceType="specialUse|shortService"
             android:permission="android.permission.FOREGROUND_SERVICE">
         </service>
     </application>
